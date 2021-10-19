@@ -3,9 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/app_name_gradient.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/button_signup_gradient.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/byespy_logo.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/font/inder.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.1318607764390897" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout-w936dp/activity_login.xml" value="0.15390625" />
-        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_login.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_login.xml" value="0.22" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_start.xml" value="0.5" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/register_activity.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/start_activity.xml" value="0.25" />
       </map>
     </option>
   </component>
