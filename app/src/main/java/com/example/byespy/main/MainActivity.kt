@@ -2,6 +2,7 @@ package com.example.byespy.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.example.byespy.R
 import com.example.byespy.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -14,6 +15,9 @@ private val drawables = arrayOf(
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    private val mainViewModel by viewModels<MainViewModel> {
+        MainViewModelFactory()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
