@@ -18,6 +18,8 @@ import com.example.byespy.databinding.ActivityLoginBinding
 
 import com.example.byespy.R
 import com.example.byespy.StartActivity
+import com.example.byespy.main.MainActivity
+import com.example.byespy.ui.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -65,6 +67,9 @@ class LoginActivity : AppCompatActivity() {
                 updateUiWithUser(loginResult.success)
             }
             setResult(Activity.RESULT_OK)
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
 
             //Complete and destroy login activity once successful
             finish()

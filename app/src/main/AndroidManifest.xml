@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ByeSpy">
         <activity
+            android:name=".main.MainActivity"
+            android:exported="true" />
+        <activity
             android:name=".StartActivity"
             android:exported="true"
             android:label="@string/app_name">

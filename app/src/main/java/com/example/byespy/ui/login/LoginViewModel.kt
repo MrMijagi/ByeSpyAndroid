@@ -23,8 +23,8 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
-            val loginResult = Api.retrofitService.signIn(LoginRequest(username, password))
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = loginResult.accessToken))
+            // val loginResult = Api.retrofitService.signIn(LoginRequest(username, password))
+            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = "Wow"))
          }
 
         // can be launched in a separate asynchronous job
