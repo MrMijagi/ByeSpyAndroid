@@ -19,6 +19,7 @@ class ConversationItemAdapter
             with(binding) {
                 conversationTitle.text = conversation.title
                 conversationLastMessage.text = conversation.lastMessage
+                profileImage.setImageDrawable(R.drawable.avatar)
             }
         }
     }
@@ -26,7 +27,7 @@ class ConversationItemAdapter
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationItemViewHolder {
         val inflater = LayoutInflater
             .from(parent.context)
-        val binding = ConversationItemBinding.inflate(inflater)
+        val binding = ConversationItemBinding.inflate(inflater, parent, false)
 
         return ConversationItemViewHolder(binding)
     }

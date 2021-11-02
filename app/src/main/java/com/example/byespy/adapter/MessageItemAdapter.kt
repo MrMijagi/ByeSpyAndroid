@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.byespy.data.model.MessageItem
 import com.example.byespy.databinding.MessageOtherItemBinding
+import com.example.byespy.databinding.MessageOtherItemNextBinding
 import com.example.byespy.databinding.MessageOwnItemBinding
+import com.example.byespy.databinding.MessageOwnItemNextBinding
 
 class MessageItemAdapter
     : ListAdapter<MessageItem,
@@ -15,6 +17,16 @@ class MessageItemAdapter
 
     // for messages send by the user of the app
     class OwnMessageItemViewHolder(private val binding: MessageOwnItemBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(message: MessageItem) {
+            with(binding) {
+                messageText.text = message.content
+            }
+        }
+    }
+
+    class OwnNextMessageItemViewHolder(private val binding: MessageOwnItemNextBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(message: MessageItem) {
@@ -36,10 +48,27 @@ class MessageItemAdapter
         }
     }
 
+    class OtherNextMessageItemViewHolder(private val binding: MessageOtherItemNextBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(message: MessageItem) {
+            with(binding) {
+                messageText.text = message.content
+            }
+        }
+    }
+
     override fun getItemViewType(position: Int): Int {
         val author = getItem(position).author
 
-        return if (author == "dawid@gmail.com") 0 else 1
+        // check if this author send more than one message in a row
+        // 0 - own message, 1 - own next message
+        // 2 - other message, 3 - other next message
+        return if (position > 0 && getItem(position - 1).author == author) {
+            if (author == "dawid@gmail.com") 1 else 3
+        } else {
+            if (author == "dawid@gmail.com") 0 else 2
+        }
     }
 
     override fun onCreateViewHolder(
@@ -50,7 +79,9 @@ class MessageItemAdapter
 
         return when(viewType) {
             0 -> OwnMessageItemViewHolder(MessageOwnItemBinding.inflate(inflater, parent, false))
-            else -> OtherMessageItemViewHolder(MessageOtherItemBinding.inflate(inflater, parent, false))
+            1 -> OwnNextMessageItemViewHolder(MessageOwnItemNextBinding.inflate(inflater, parent, false))
+            2 -> OtherMessageItemViewHolder(MessageOtherItemBinding.inflate(inflater, parent, false))
+            else -> OtherNextMessageItemViewHolder(MessageOtherItemNextBinding.inflate(inflater, parent, false))
         }
     }
 
@@ -60,8 +91,16 @@ class MessageItemAdapter
                 val correctHolder = holder as OwnMessageItemViewHolder
                 correctHolder.bind(getItem(position))
             }
-            else -> {
+            1 -> {
+                val correctHolder = holder as OwnNextMessageItemViewHolder
+                correctHolder.bind(getItem(position))
+            }
+            2 -> {
                 val correctHolder = holder as OtherMessageItemViewHolder
+                correctHolder.bind(getItem(position))
+            }
+            else -> {
+                val correctHolder = holder as OtherNextMessageItemViewHolder
                 correctHolder.bind(getItem(position))
             }
         }

@@ -35,6 +35,12 @@ private val retrofit = Retrofit.Builder()
 interface ApiService {
     @POST("oauth/token")
     suspend fun signIn(@Body request: LoginRequest): LoginResponse
+//    @POST("sign_up")
+//    suspend fun signUp(@Body request: RegistrationRequest): RegistrationResponse
+//    @POST("register_keys")
+//    suspend fun registerKeys(@Body request: KeyRegistrationRequest): KeyRegistrationResponse
+//    @POST("refresh_token")
+//    suspend fun refreshToken(@Body request: RefreshTokenRequest): RefreshTokenResponse
 }
 
 object Api {
