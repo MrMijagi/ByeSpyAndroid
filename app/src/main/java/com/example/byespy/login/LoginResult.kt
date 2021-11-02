@@ -1,4 +1,4 @@
-package com.example.byespy.ui.login
+package com.example.byespy.login
 
 /**
  * Authentication result : success (user details) or error message.

@@ -3,9 +3,10 @@ package com.example.byespy
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.byespy.chat.ChatActivity
 import com.example.byespy.databinding.StartActivityBinding
-import com.example.byespy.ui.login.LoginActivity
-import com.example.byespy.ui.register.RegisterActivity
+import com.example.byespy.login.LoginActivity
+import com.example.byespy.register.RegisterActivity
 
 class StartActivity : AppCompatActivity() {
 
@@ -24,6 +25,12 @@ class StartActivity : AppCompatActivity() {
         val signUpButton = binding.SignUpButton
             signUpButton.setOnClickListener {
                 val intent = Intent(this, RegisterActivity::class.java)
+                startActivity(intent)
+            }
+
+        val instantChatButton = binding.button2
+            instantChatButton.setOnClickListener {
+                val intent = Intent(this, ChatActivity::class.java)
                 startActivity(intent)
             }
     }

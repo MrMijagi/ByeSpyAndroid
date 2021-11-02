@@ -1,17 +1,12 @@
-package com.example.byespy.data.adapter
+package com.example.byespy.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.byespy.R
 import com.example.byespy.data.model.ConversationItem
 import com.example.byespy.databinding.ConversationItemBinding
-import com.example.byespy.databinding.FragmentConversationsBinding
 
 class ConversationItemAdapter
     : ListAdapter<ConversationItem,

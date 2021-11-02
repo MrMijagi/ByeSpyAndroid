@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import com.example.byespy.data.ConversationItemDataSource
-import com.example.byespy.data.adapter.ConversationItemAdapter
+import com.example.byespy.adapter.ConversationItemAdapter
 import com.example.byespy.data.model.ConversationItem
 import com.example.byespy.databinding.FragmentConversationsBinding
 

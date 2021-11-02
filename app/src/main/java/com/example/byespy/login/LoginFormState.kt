@@ -1,4 +1,4 @@
-package com.example.byespy.ui.login
+package com.example.byespy.login
 
 /**
  * Data validation state of the login form.

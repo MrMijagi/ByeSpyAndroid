@@ -1,9 +1,8 @@
 package com.example.byespy.main
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.byespy.data.ConversationItemDataSource
+import com.example.byespy.data.datasource.ConversationItemDataSource
 
 class MainViewModel : ViewModel() {
 

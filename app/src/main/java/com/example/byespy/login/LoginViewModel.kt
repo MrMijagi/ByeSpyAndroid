@@ -1,4 +1,4 @@
-package com.example.byespy.ui.login
+package com.example.byespy.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,11 +6,8 @@ import androidx.lifecycle.ViewModel
 import android.util.Patterns
 import androidx.lifecycle.viewModelScope
 import com.example.byespy.data.LoginRepository
-import com.example.byespy.data.Result
 
 import com.example.byespy.R
-import com.example.byespy.network.Api
-import com.example.byespy.network.LoginRequest
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {

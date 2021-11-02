@@ -1,5 +1,6 @@
-package com.example.byespy.data
+package com.example.byespy.data.datasource
 
+import com.example.byespy.data.Result
 import com.example.byespy.data.model.LoggedInUser
 import java.io.IOException
 

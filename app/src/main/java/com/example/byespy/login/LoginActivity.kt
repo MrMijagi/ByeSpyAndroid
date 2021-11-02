@@ -1,4 +1,4 @@
-package com.example.byespy.ui.login
+package com.example.byespy.login
 
 import android.app.Activity
 import android.content.Intent
@@ -17,9 +17,7 @@ import android.widget.Toast
 import com.example.byespy.databinding.ActivityLoginBinding
 
 import com.example.byespy.R
-import com.example.byespy.StartActivity
 import com.example.byespy.main.MainActivity
-import com.example.byespy.ui.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
 

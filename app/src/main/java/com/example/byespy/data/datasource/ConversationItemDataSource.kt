@@ -1,6 +1,5 @@
-package com.example.byespy.data
+package com.example.byespy.data.datasource
 
-import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.byespy.data.model.ConversationItem

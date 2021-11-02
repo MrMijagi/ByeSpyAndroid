@@ -1,13 +1,9 @@
-package com.example.byespy.ui.register
+package com.example.byespy.register
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.example.byespy.databinding.RegisterActivityBinding
-
-import com.example.byespy.R
-import com.example.byespy.StartActivity
 
 class RegisterActivity : AppCompatActivity() {
 

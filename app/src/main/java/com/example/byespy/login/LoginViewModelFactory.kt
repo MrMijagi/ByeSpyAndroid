@@ -1,8 +1,8 @@
-package com.example.byespy.ui.login
+package com.example.byespy.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.byespy.data.LoginDataSource
+import com.example.byespy.data.datasource.LoginDataSource
 import com.example.byespy.data.LoginRepository
 
 /**
