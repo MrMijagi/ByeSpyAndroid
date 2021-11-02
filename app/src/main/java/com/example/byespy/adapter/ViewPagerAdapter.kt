@@ -1,9 +1,12 @@
-package com.example.byespy.main
+package com.example.byespy.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.byespy.main.ContactsFragment
+import com.example.byespy.main.ConversationsFragment
+import com.example.byespy.main.SettingsFragment
 
 private const val NUM_TABS = 3
 
