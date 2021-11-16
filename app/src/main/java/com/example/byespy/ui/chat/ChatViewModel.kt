@@ -8,7 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.byespy.data.datasource.MessageItemDataSource
 import com.example.byespy.data.model.MessageItem
 import com.example.byespy.network.Api
+import com.example.byespy.network.CustomDateAdapter
 import com.example.byespy.network.requests.SaveMessageRequest
+import com.example.byespy.network.websocket.Message
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -42,13 +46,14 @@ class ChatViewModel(val messageItemDataSource: MessageItemDataSource) : ViewMode
         val message = SaveMessageRequest(
             type = "type",
             content = content,
-            mailTo = "jarek@mm.pl",
+            mailTo = "tabaluga@mm.pl",
             sendAt = Calendar.getInstance().time
         )
 
         viewModelScope.launch {
             try {
-                Api.getApiService(context).saveMessage(message)
+                val response = Api.getApiService(context).saveMessage(message)
+                Log.d("chat", response.isSuccessful.toString())
             } catch (e: Exception) {
                 Log.e("chat", "error on saveMessage")
                 Log.e("chat", e.toString())

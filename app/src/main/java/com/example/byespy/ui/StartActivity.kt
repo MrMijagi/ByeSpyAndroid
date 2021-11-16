@@ -42,11 +42,5 @@ class StartActivity : AppCompatActivity() {
                 val intent = Intent(this, RegisterActivity::class.java)
                 startActivity(intent)
             }
-
-        val instantChatButton = binding.button2
-            instantChatButton.setOnClickListener {
-                val intent = Intent(this, ChatActivity::class.java)
-                startActivity(intent)
-            }
     }
 }

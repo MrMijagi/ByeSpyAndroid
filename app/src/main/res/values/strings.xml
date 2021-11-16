@@ -28,4 +28,5 @@
     <string name="id_desc">Id:</string>
     <string name="email_desc">Email:</string>
     <string name="logout">Logout</string>
+    <string name="chat">Chat</string>
 </resources>

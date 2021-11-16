@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.example.byespy.databinding.FragmentSettingsBinding
 import com.example.byespy.network.SessionManager
 import com.example.byespy.ui.StartActivity
+import com.example.byespy.ui.chat.ChatActivity
 
 class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
@@ -26,6 +27,7 @@ class SettingsFragment : Fragment() {
         val idValue = binding.idValue
         val emailValue = binding.emailValue
         val button = binding.button
+        val chat = binding.buttonChat
 
         mainViewModel.getProfile(requireContext())
 
@@ -48,6 +50,11 @@ class SettingsFragment : Fragment() {
             //Complete and destroy login activity once successful
             activity?.setResult(AppCompatActivity.RESULT_OK)
             activity?.finish()
+        }
+
+        chat.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            startActivity(intent)
         }
 
         return binding.root
