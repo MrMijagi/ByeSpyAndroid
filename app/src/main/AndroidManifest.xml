@@ -13,14 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ByeSpy">
         <activity
-            android:name=".chat.ChatActivity"
+            android:name="com.example.byespy.ui.login.CodeVerificationActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.example.byespy.ui.chat.ChatActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".main.MainActivity"
+            android:name="com.example.byespy.ui.main.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".StartActivity"
+            android:name=".ui.StartActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
@@ -29,8 +32,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.LoginActivity" />
-        <activity android:name=".register.RegisterActivity" />
+        <activity android:name="com.example.byespy.ui.login.LoginActivity" />
+        <activity android:name="com.example.byespy.ui.register.RegisterActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
