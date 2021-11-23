@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.example.byespy.ByeSpyApplication
 import com.example.byespy.databinding.FragmentSettingsBinding
 import com.example.byespy.network.SessionManager
 import com.example.byespy.ui.StartActivity
@@ -16,7 +17,12 @@ import com.example.byespy.ui.chat.ChatActivity
 
 class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
-    private val mainViewModel by activityViewModels<MainViewModel>()
+    private val mainViewModel by activityViewModels<MainViewModel> {
+        MainViewModelFactory(
+            (activity?.application as ByeSpyApplication).database.conversationDao(),
+            (activity?.application as ByeSpyApplication).database.contactDao()
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,17 +30,15 @@ class SettingsFragment : Fragment() {
     ): View? {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
-        val idValue = binding.idValue
         val emailValue = binding.emailValue
-        val button = binding.button
-        val chat = binding.buttonChat
+        val button = binding.buttonLogout
+        val chat = binding.buttonAddContact
 
         mainViewModel.getProfile(requireContext())
 
         mainViewModel.profileResponse.observe(viewLifecycleOwner, Observer {
             val profileResponse = it ?: return@Observer
 
-            idValue.text = profileResponse.id.toString()
             emailValue.text = profileResponse.email
         })
 

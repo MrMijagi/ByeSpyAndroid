@@ -13,7 +13,6 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -42,7 +41,7 @@ interface ApiService {
 //    suspend fun registerKeys(@Body request: KeyRegistrationRequest): KeyRegistrationResponse
     @POST("oauth/revoke")
     suspend fun refreshToken(@Body request: RefreshTokenRequest): RefreshTokenResponse
-    @POST("message/save_message")
+    @POST("messages/save_message")
     suspend fun saveMessage(@Body request: SaveMessageRequest): Response<Unit>
 }
 

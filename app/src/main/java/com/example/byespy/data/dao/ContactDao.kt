@@ -1,18 +1,23 @@
 package com.example.byespy.data.dao
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.*
 import com.example.byespy.data.entity.Contact
-import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface ContactDao {
     @Query("SELECT * FROM contact_table")
-    fun getContacts(): Flow<List<Contact>>
+    fun getAll(): Flow<List<Contact>>
+
+    @Query("SELECT * FROM contact_table WHERE id = :id")
+    fun getById(id: Long): Contact
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(contact: Contact)
+    fun insert(contact: Contact): Long
+
+    @Delete
+    fun delete(contact: Contact)
 
     @Query("DELETE FROM contact_table")
-    suspend fun deleteAll()
+    fun deleteAll()
 }

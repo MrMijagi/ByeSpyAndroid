@@ -5,48 +5,51 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.byespy.data.datasource.MessageItemDataSource
+import com.example.byespy.data.dao.MessageDao
+import com.example.byespy.data.entity.Message
 import com.example.byespy.data.model.MessageItem
 import com.example.byespy.network.Api
-import com.example.byespy.network.CustomDateAdapter
 import com.example.byespy.network.requests.SaveMessageRequest
-import com.example.byespy.network.websocket.Message
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.util.*
 
-class ChatViewModel(val messageItemDataSource: MessageItemDataSource) : ViewModel() {
+class ChatViewModel(private val conversationId: Long,
+                    private val messageDao: MessageDao) : ViewModel() {
 
-    val messagesLiveData = messageItemDataSource.getMessageList()
+    fun messages(): Flow<List<MessageItem>> = messageDao.getMessagesByConversationId(conversationId)
+
+    fun getEmailFromConversationId() = messageDao.getEmailByConversationId(conversationId)
 
     // add own message to list
     fun insertOwnMessage(content: String) {
-        val message = MessageItem(
-            messageItemDataSource.getNewId(),
-            "dawid@gmail.com",
-            content
-        )
-        MessageItemDataSource.getMessageItemDataSource().addMessage(message)
+        messageDao.insert(Message(
+            content = content,
+            sentAt = Calendar.getInstance().time,
+            isOwnMessage = true,
+            conversationId = conversationId,
+            threadId = 0
+        ))
     }
 
     // add other message to list
-    fun insertOtherMessage(content: String, from: String) {
-        val message = MessageItem(
-            messageItemDataSource.getNewId(),
-            from,
-            content
-        )
-        MessageItemDataSource.getMessageItemDataSource().addMessage(message)
+    fun insertOtherMessage(content: String, createdAt: Date) {
+        messageDao.insert(Message(
+            content = content,
+            sentAt = createdAt,
+            isOwnMessage = false,
+            conversationId = conversationId,
+            threadId = 0
+        ))
     }
 
     // send request to server
-    fun sendMessage(context: Context, content: String) {
+    fun sendMessage(context: Context, content: String, mailTo: String) {
         val message = SaveMessageRequest(
             type = "type",
             content = content,
-            mailTo = "tabaluga@mm.pl",
+            receiverId = 2,
             sendAt = Calendar.getInstance().time
         )
 
@@ -60,21 +63,15 @@ class ChatViewModel(val messageItemDataSource: MessageItemDataSource) : ViewMode
             }
          }
     }
-
-
-    fun getMessagesSize(): Int {
-        return messageItemDataSource.getSize()
-    }
 }
 
-class ChatViewModelFactory : ViewModelProvider.Factory {
+class ChatViewModelFactory(private val conversationId: Long,
+                           private val messageDao: MessageDao) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChatViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ChatViewModel(
-                messageItemDataSource = MessageItemDataSource.getMessageItemDataSource()
-            ) as T
+            return ChatViewModel(conversationId, messageDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

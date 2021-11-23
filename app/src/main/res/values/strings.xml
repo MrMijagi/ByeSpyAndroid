@@ -19,7 +19,7 @@
     <string name="register_button">REGISTER</string>
     <string name="conversations_fragment">Conversations</string>
     <string name="contacts_fragment">Contacts</string>
-    <string name="settings_fragment">Profile</string>
+    <string name="settings_fragment">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="message_send_label">Message ...</string>
     <string name="code_verification_text">Enter code</string>
@@ -29,4 +29,11 @@
     <string name="email_desc">Email:</string>
     <string name="logout">Logout</string>
     <string name="chat">Chat</string>
+    <string name="add_contact">Add new contact</string>
+    <string name="reset_password">Reset password</string>
+    <string name="new_conversation_title">New conversation</string>
+    <string name="add_conversation">Add conversation</string>
+    <string name="choose_profile">Choose image</string>
+    <string name="prompt_contact_email">Contact email</string>
+    <string name="prompt_conversation_name">Conversation name</string>
 </resources>

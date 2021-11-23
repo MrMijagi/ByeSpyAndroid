@@ -4,12 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "contact_table")
-data class Contact(
-    @ColumnInfo(name = "server_id")
-    val serverId: Long,
-    val email: String,
-//    val image: String?
+@Entity(tableName = "conversation_table")
+data class Conversation(
+    val name: String,
+    @ColumnInfo(name = "contact_id")
+    val contactId: Long,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

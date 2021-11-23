@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.lifecycle.coroutineScope
+import com.example.byespy.ByeSpyApplication
 import com.example.byespy.ui.adapter.MessageItemAdapter
 import com.example.byespy.data.model.MessageItem
 import com.example.byespy.databinding.ActivityChatBinding
@@ -15,6 +17,8 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.*
 
@@ -22,7 +26,10 @@ class ChatActivity : AppCompatActivity(), MessageListener {
 
     private lateinit var binding: ActivityChatBinding
     private val chatViewModel by viewModels<ChatViewModel> {
-        ChatViewModelFactory()
+        ChatViewModelFactory(
+            intent.getLongExtra("conversationId", 0),
+            (application as ByeSpyApplication).database.messageDao()
+        )
     }
 
     companion object {
@@ -42,11 +49,13 @@ class ChatActivity : AppCompatActivity(), MessageListener {
         val recyclerViewAdapter = MessageItemAdapter()
         recyclerView.adapter = recyclerViewAdapter
 
-        chatViewModel.messagesLiveData.observe(this, {
-            it?.let {
-                recyclerViewAdapter.submitList(it as MutableList<MessageItem>)
+        val conversationId = intent.getLongExtra("conversationId", 0)
+
+        lifecycle.coroutineScope.launch {
+            chatViewModel.messages().collect {
+                recyclerViewAdapter.submitList(it)
             }
-        })
+        }
 
         // setup sending message through button
         val sendButton = binding.sendMessageButton
@@ -54,11 +63,17 @@ class ChatActivity : AppCompatActivity(), MessageListener {
 
         sendButton.setOnClickListener {
             chatViewModel.insertOwnMessage(inputText.text.toString())
-            // send message
-            chatViewModel.sendMessage(applicationContext, inputText.text.toString())
+
+            // send message to server
+            chatViewModel.sendMessage(
+                applicationContext,
+                inputText.text.toString(),
+                chatViewModel.getEmailFromConversationId()
+            )
+
             inputText.text?.clear()
 
-            recyclerView.scrollToPosition(chatViewModel.getMessagesSize() - 1)
+            recyclerView.scrollToPosition(recyclerViewAdapter.itemCount - 1)
         }
 
         WebSocketManager.init(WEB_SOCKET_URL, this)
@@ -86,7 +101,7 @@ class ChatActivity : AppCompatActivity(), MessageListener {
             if (messageObject != null) {
                 chatViewModel.insertOtherMessage(
                     messageObject.content,
-                    "tabaluga@mm.pl"
+                    messageObject.createdAt
                 )
             }
         }
@@ -125,11 +140,17 @@ class ChatActivity : AppCompatActivity(), MessageListener {
             jsonObject.has("message") -> {
                 // receive messages
                 val message = jsonObject.getJSONObject("message")
-                val messages = message.getJSONArray("messages")
 
-                // iterate through each message
-                for (i in 0..messages.length()) {
-                    receiveMessage(messages.getString(i))
+                if (jsonObject.has("message")) {
+                    val innerMessage = message.getJSONObject("message")
+                    receiveMessage(innerMessage.toString())
+                } else {            // messages
+                    val messages = message.getJSONArray("messages")
+
+                    // iterate through each message
+                    for (i in 0..messages.length()) {
+                        receiveMessage(messages.getString(i))
+                    }
                 }
             }
             else -> {

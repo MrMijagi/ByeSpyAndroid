@@ -11,7 +11,7 @@ import com.example.byespy.databinding.MessageOtherItemNextBinding
 import com.example.byespy.databinding.MessageOwnItemBinding
 import com.example.byespy.databinding.MessageOwnItemNextBinding
 
-class MessageItemAdapter
+class MessageItemAdapter()
     : ListAdapter<MessageItem,
         RecyclerView.ViewHolder>(MessageItemDiffCallback) {
 
@@ -43,7 +43,7 @@ class MessageItemAdapter
         fun bind(message: MessageItem) {
             with(binding) {
                 messageText.text = message.content
-                messageAuthor.text = message.author
+                messageAuthor.text = message.otherEmail
             }
         }
     }
@@ -59,15 +59,15 @@ class MessageItemAdapter
     }
 
     override fun getItemViewType(position: Int): Int {
-        val author = getItem(position).author
+        val ownMessage = getItem(position).ownMessage
 
         // check if this author send more than one message in a row
         // 0 - own message, 1 - own next message
         // 2 - other message, 3 - other next message
-        return if (position > 0 && getItem(position - 1).author == author) {
-            if (author == "dawid@gmail.com") 1 else 3
+        return if (position > 0 && getItem(position - 1).ownMessage == ownMessage) {
+            if (ownMessage) 1 else 3
         } else {
-            if (author == "dawid@gmail.com") 0 else 2
+            if (ownMessage) 0 else 2
         }
     }
 

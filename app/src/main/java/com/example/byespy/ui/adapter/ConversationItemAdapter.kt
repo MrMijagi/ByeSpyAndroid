@@ -1,5 +1,6 @@
 package com.example.byespy.ui.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,19 +9,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.byespy.data.model.ConversationItem
 import com.example.byespy.databinding.ConversationItemBinding
 
-class ConversationItemAdapter
+class ConversationItemAdapter(private val onClick: (ConversationItem) -> Unit)
     : ListAdapter<ConversationItem,
         ConversationItemAdapter.ConversationItemViewHolder>(ConversationDiffCallback) {
 
-    class ConversationItemViewHolder(private val binding: ConversationItemBinding)
+    class ConversationItemViewHolder(private val binding: ConversationItemBinding, val onClick: (ConversationItem) -> Unit)
         : RecyclerView.ViewHolder(binding.root) {
 
+        private var currentConversationItem: ConversationItem? = null
+
+        init {
+            binding.root.setOnClickListener {
+                currentConversationItem?.let {
+                    onClick(it)
+                }
+            }
+        }
+
         fun bind(conversation: ConversationItem) {
+            currentConversationItem = conversation
+
             with(binding) {
                 conversationTitle.text = conversation.title
-                conversationLastMessage.text = conversation.lastMessage
-                profileImage.setImageResource(conversation.image)
-                profileImage.clipToOutline = true
+//                conversationLastMessage.text = conversation.lastMessage
+//                profileImage.setImageURI(Uri.parse(conversation.image))
+//                profileImage.clipToOutline = true
             }
         }
     }
@@ -30,7 +43,7 @@ class ConversationItemAdapter
             .from(parent.context)
         val binding = ConversationItemBinding.inflate(inflater, parent, false)
 
-        return ConversationItemViewHolder(binding)
+        return ConversationItemViewHolder(binding, onClick)
     }
 
     override fun onBindViewHolder(holder: ConversationItemViewHolder, position: Int) {
