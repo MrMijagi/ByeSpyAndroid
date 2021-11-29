@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,8 +28,7 @@ class ConversationsFragment : Fragment() {
     private lateinit var startNewConversationActivity: ActivityResultLauncher<Intent>
     private val mainViewModel by activityViewModels<MainViewModel> {
         MainViewModelFactory(
-            (activity?.application as ByeSpyApplication).database.conversationDao(),
-            (activity?.application as ByeSpyApplication).database.contactDao()
+            (activity?.application as ByeSpyApplication).database.mainActivityDao()
         )
     }
 

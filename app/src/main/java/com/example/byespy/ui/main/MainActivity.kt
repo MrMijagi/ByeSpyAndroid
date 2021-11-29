@@ -18,8 +18,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private val mainViewModel by viewModels<MainViewModel> {
         MainViewModelFactory(
-            (application as ByeSpyApplication).database.conversationDao(),
-            (application as ByeSpyApplication).database.contactDao()
+            (application as ByeSpyApplication).database.mainActivityDao()
         )
     }
 

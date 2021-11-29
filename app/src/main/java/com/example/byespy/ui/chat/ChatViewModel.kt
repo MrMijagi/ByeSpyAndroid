@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.byespy.data.dao.MessageDao
+import com.example.byespy.data.dao.ChatActivityDao
 import com.example.byespy.data.entity.Message
 import com.example.byespy.data.model.MessageItem
 import com.example.byespy.network.Api
@@ -15,16 +15,18 @@ import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.util.*
 
-class ChatViewModel(private val conversationId: Long,
-                    private val messageDao: MessageDao) : ViewModel() {
+class ChatViewModel(
+    val conversationId: Long,
+    private val chatActivityDao: ChatActivityDao
+    ) : ViewModel() {
 
-    fun messages(): Flow<List<MessageItem>> = messageDao.getMessagesByConversationId(conversationId)
+    fun messages(): Flow<List<MessageItem>> = chatActivityDao.getMessagesByConversationId(conversationId)
 
-    fun getEmailFromConversationId() = messageDao.getEmailByConversationId(conversationId)
+    fun getEmailFromConversationId() = chatActivityDao.getEmailByConversationId(conversationId)
 
     // add own message to list
     fun insertOwnMessage(content: String) {
-        messageDao.insert(Message(
+        chatActivityDao.insert(Message(
             content = content,
             sentAt = Calendar.getInstance().time,
             isOwnMessage = true,
@@ -35,7 +37,7 @@ class ChatViewModel(private val conversationId: Long,
 
     // add other message to list
     fun insertOtherMessage(content: String, createdAt: Date) {
-        messageDao.insert(Message(
+        chatActivityDao.insert(Message(
             content = content,
             sentAt = createdAt,
             isOwnMessage = false,
@@ -65,13 +67,15 @@ class ChatViewModel(private val conversationId: Long,
     }
 }
 
-class ChatViewModelFactory(private val conversationId: Long,
-                           private val messageDao: MessageDao) : ViewModelProvider.Factory {
+class ChatViewModelFactory(
+    private val conversationId: Long,
+    private val chatActivityDao: ChatActivityDao
+    ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChatViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ChatViewModel(conversationId, messageDao) as T
+            return ChatViewModel(conversationId, chatActivityDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

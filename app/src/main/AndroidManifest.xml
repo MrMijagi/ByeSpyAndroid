@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ByeSpy">
         <activity
+            android:name=".ui.contact.ContactActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.main.NewConversationActivity"
             android:exported="false" />
         <activity

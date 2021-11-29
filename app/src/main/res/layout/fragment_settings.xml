@@ -60,7 +60,6 @@
         app:iconSize="@dimen/icon_size"
         app:layout_constraintBottom_toTopOf="@+id/button_add_contact"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buttons_guideline" />
 
@@ -79,7 +78,6 @@
         app:iconSize="@dimen/icon_size"
         app:layout_constraintBottom_toTopOf="@+id/button_logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_reset_password" />
 
@@ -98,7 +96,6 @@
         app:iconSize="@dimen/icon_size"
         app:layout_constraintBottom_toTopOf="@+id/footer_guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_add_contact" />
 

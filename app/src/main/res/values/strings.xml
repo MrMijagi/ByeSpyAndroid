@@ -36,4 +36,7 @@
     <string name="choose_profile">Choose image</string>
     <string name="prompt_contact_email">Contact email</string>
     <string name="prompt_conversation_name">Conversation name</string>
+    <string name="contact_info">Contact info</string>
+    <string name="clear_all_messages">Clear all messages</string>
+    <string name="delete_contact">Delete contact</string>
 </resources>

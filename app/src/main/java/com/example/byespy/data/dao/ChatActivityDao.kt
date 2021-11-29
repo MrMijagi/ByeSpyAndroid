@@ -1,27 +1,17 @@
 package com.example.byespy.data.dao
 
-import androidx.room.*
-import com.example.byespy.data.entity.Contact
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.byespy.data.entity.Message
 import com.example.byespy.data.model.MessageItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface MessageDao {
-    @Query("SELECT * FROM message_table")
-    fun getAll(): Flow<List<Message>>
-
-    @Query("SELECT * FROM message_table WHERE id = :id")
-    fun getById(id: Long): Message
-
+interface ChatActivityDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(message: Message)
-
-    @Delete
-    fun delete(message: Message)
-
-    @Query("DELETE FROM message_table")
-    fun deleteAll()
 
     @Query("SELECT message_table.id AS id, " +
             "contact_table.email AS otherEmail, " +

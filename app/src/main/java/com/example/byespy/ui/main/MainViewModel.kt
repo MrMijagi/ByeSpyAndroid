@@ -3,8 +3,7 @@ package com.example.byespy.ui.main
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.*
-import com.example.byespy.data.dao.ContactDao
-import com.example.byespy.data.dao.ConversationDao
+import com.example.byespy.data.dao.MainActivityDao
 import com.example.byespy.data.entity.Contact
 import com.example.byespy.data.entity.Conversation
 import com.example.byespy.data.model.ConversationItem
@@ -17,14 +16,13 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class MainViewModel(
-    private val conversationDao: ConversationDao,
-    private val contactDao: ContactDao
+    private val mainActivityDao: MainActivityDao
 ) : ViewModel() {
 
     private val _profileResponse = MutableLiveData<ProfileResponse>()
     val profileResponse: LiveData<ProfileResponse> = _profileResponse
 
-    fun conversations(): Flow<List<ConversationItem>> = conversationDao.getAllItems()
+    fun conversations(): Flow<List<ConversationItem>> = mainActivityDao.getAllItems()
 
     fun getProfile(context: Context) {
         val sessionManager = SessionManager(context)
@@ -44,12 +42,12 @@ class MainViewModel(
     }
 
     fun addConversation(email: String, name: String, image: String) {
-        val contactId = contactDao.insert(Contact(
+        val contactId = mainActivityDao.insert(Contact(
             email = email,
             serverId = 0            // not used for now
         ))
 
-        conversationDao.insert(Conversation(
+        mainActivityDao.insert(Conversation(
             name = name,
             contactId = contactId
         ))
@@ -76,14 +74,13 @@ class MainViewModel(
 }
 
 class MainViewModelFactory(
-    private val conversationDao: ConversationDao,
-    private val contactDao: ContactDao
+    private val mainActivityDao: MainActivityDao
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return MainViewModel(conversationDao, contactDao) as T
+            return MainViewModel(mainActivityDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

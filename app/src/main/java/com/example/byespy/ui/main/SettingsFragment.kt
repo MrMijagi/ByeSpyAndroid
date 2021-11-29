@@ -16,11 +16,11 @@ import com.example.byespy.ui.StartActivity
 import com.example.byespy.ui.chat.ChatActivity
 
 class SettingsFragment : Fragment() {
+
     private lateinit var binding: FragmentSettingsBinding
     private val mainViewModel by activityViewModels<MainViewModel> {
         MainViewModelFactory(
-            (activity?.application as ByeSpyApplication).database.conversationDao(),
-            (activity?.application as ByeSpyApplication).database.contactDao()
+            (activity?.application as ByeSpyApplication).database.mainActivityDao()
         )
     }
 

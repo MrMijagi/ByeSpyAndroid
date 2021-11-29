@@ -1,11 +1,16 @@
 package com.example.byespy.ui.chat
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.lifecycle.coroutineScope
 import com.example.byespy.ByeSpyApplication
+import com.example.byespy.R
 import com.example.byespy.ui.adapter.MessageItemAdapter
 import com.example.byespy.data.model.MessageItem
 import com.example.byespy.databinding.ActivityChatBinding
@@ -13,6 +18,8 @@ import com.example.byespy.network.websocket.Message
 import com.example.byespy.network.websocket.MessageListener
 import com.example.byespy.network.websocket.MessageReceived
 import com.example.byespy.network.websocket.WebSocketManager
+import com.example.byespy.ui.contact.ContactActivity
+import com.example.byespy.ui.main.MainActivity
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
@@ -28,7 +35,7 @@ class ChatActivity : AppCompatActivity(), MessageListener {
     private val chatViewModel by viewModels<ChatViewModel> {
         ChatViewModelFactory(
             intent.getLongExtra("conversationId", 0),
-            (application as ByeSpyApplication).database.messageDao()
+            (application as ByeSpyApplication).database.chatActivityDao()
         )
     }
 
@@ -48,8 +55,6 @@ class ChatActivity : AppCompatActivity(), MessageListener {
         val recyclerView = binding.chatRecyclerView
         val recyclerViewAdapter = MessageItemAdapter()
         recyclerView.adapter = recyclerViewAdapter
-
-        val conversationId = intent.getLongExtra("conversationId", 0)
 
         lifecycle.coroutineScope.launch {
             chatViewModel.messages().collect {
@@ -84,6 +89,30 @@ class ChatActivity : AppCompatActivity(), MessageListener {
         super.onDestroy()
 
         WebSocketManager.close()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.chat_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.contact_info -> {
+                val intent = Intent(this, ContactActivity::class.java)
+                intent.putExtra("conversationId", chatViewModel.conversationId)
+
+                startActivity(intent)
+                true
+            }
+            R.id.home -> {
+                setResult(RESULT_OK)
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun receiveMessage(message: String?) {
