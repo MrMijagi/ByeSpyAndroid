@@ -1,14 +1,8 @@
 package com.example.byespy.network
 
 import android.content.Context
-import com.example.byespy.network.requests.LoginRequest
-import com.example.byespy.network.requests.RefreshTokenRequest
-import com.example.byespy.network.requests.RegistrationRequest
-import com.example.byespy.network.requests.SaveMessageRequest
-import com.example.byespy.network.response.AuthorizeUserResponse
-import com.example.byespy.network.response.LoginResponse
-import com.example.byespy.network.response.ProfileResponse
-import com.example.byespy.network.response.RefreshTokenResponse
+import com.example.byespy.network.requests.*
+import com.example.byespy.network.response.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -29,20 +23,35 @@ private val moshi = Moshi.Builder()
     .build()
 
 interface ApiService {
+    // login + registration
     @POST("oauth/token")
     suspend fun signIn(@Body request: LoginRequest): LoginResponse
-    @GET("authorize_user_first_step")
-    suspend fun authorizeUser(@Query("email") email: String, @Query("password") password: String): Response<AuthorizeUserResponse>
-    @GET("profile")
-    suspend fun getProfile(): ProfileResponse
-    @POST("sign_up")
-    suspend fun signUp(@Body request: RegistrationRequest): Response<Unit>
-//    @POST("register_keys")
-//    suspend fun registerKeys(@Body request: KeyRegistrationRequest): KeyRegistrationResponse
     @POST("oauth/revoke")
     suspend fun refreshToken(@Body request: RefreshTokenRequest): RefreshTokenResponse
+    @GET("authorize_user_first_step")
+    suspend fun authorizeUser(@Query("email") email: String, @Query("password") password: String): Response<AuthorizeUserResponse>
+    @POST("sign_up")
+    suspend fun signUp(@Body request: RegistrationRequest): Response<Unit>
+
+    // profile
+    @GET("profile")
+    suspend fun getProfile(): ProfileResponse
+
+    // messages
     @POST("messages/save_message")
     suspend fun saveMessage(@Body request: SaveMessageRequest): Response<Unit>
+
+    // invitations
+    @GET("invitations")
+    suspend fun getInvitations(): InvitationsResponse
+    @POST("invitations")
+    suspend fun sendInvitation(@Body request: InvitationRequest): Response<Unit>
+    @DELETE("invitations/{id}")
+    suspend fun cancelInvitation(@Path("id") id: Int): Response<Unit>
+    @POST("invitations/{id}")
+    suspend fun acceptOrRejectInvitation(@Path("id") id: Int, @Body request: InvitationStatusRequest): Response<Unit>
+    @GET("invitations/check")
+    suspend fun checkEmail(@Query("value") value: String): Response<Unit>
 }
 
 object Api {

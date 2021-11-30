@@ -9,6 +9,7 @@ import com.example.byespy.data.entity.Conversation
 import com.example.byespy.data.model.ConversationItem
 import com.example.byespy.network.Api
 import com.example.byespy.network.SessionManager
+import com.example.byespy.network.requests.InvitationRequest
 import com.example.byespy.network.requests.RefreshTokenRequest
 import com.example.byespy.network.response.ProfileResponse
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,9 @@ class MainViewModel(
 
     private val _profileResponse = MutableLiveData<ProfileResponse>()
     val profileResponse: LiveData<ProfileResponse> = _profileResponse
+
+    private val _sendInvitationLiveData = MutableLiveData<Boolean>()
+    val sendInvitationLiveData: LiveData<Boolean> = _sendInvitationLiveData
 
     fun conversations(): Flow<List<ConversationItem>> = mainActivityDao.getAllItems()
 
@@ -68,6 +72,20 @@ class MainViewModel(
                     e.message,
                     Toast.LENGTH_LONG
                 ).show()
+            }
+        }
+    }
+
+    fun sendInvitation(context: Context, email: String) {
+        viewModelScope.launch {
+            try {
+                val response = Api.getApiService(context).sendInvitation(
+                    InvitationRequest(email)
+                )
+
+                _sendInvitationLiveData.postValue(response.isSuccessful)
+            } catch (e: Exception) {
+                _sendInvitationLiveData.postValue(false)
             }
         }
     }

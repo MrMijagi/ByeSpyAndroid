@@ -39,4 +39,13 @@
     <string name="contact_info">Contact info</string>
     <string name="clear_all_messages">Clear all messages</string>
     <string name="delete_contact">Delete contact</string>
+    <string name="invitations_sent">Invitations Sent</string>
+    <string name="invitations_received">Invitations Received</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="cancel_invitation">Cancel</string>
+    <string name="enter_email">Enter email</string>
+    <string name="email">Email</string>
+    <string name="send_invite">Send invitation</string>
+    <string name="invitations">Invitations</string>
 </resources>

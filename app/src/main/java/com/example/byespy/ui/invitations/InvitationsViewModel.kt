@@ -1,0 +1,169 @@
+package com.example.byespy.ui.invitations
+
+import android.content.Context
+import android.widget.Toast
+import androidx.lifecycle.*
+import com.example.byespy.data.dao.MainActivityDao
+import com.example.byespy.data.entity.Contact
+import com.example.byespy.data.entity.Conversation
+import com.example.byespy.data.model.InvitationItem
+import com.example.byespy.network.Api
+import com.example.byespy.network.requests.InvitationStatusRequest
+import kotlinx.coroutines.launch
+import java.lang.Exception
+
+class InvitationsViewModel(
+    private val mainActivityDao: MainActivityDao
+) : ViewModel() {
+
+    private val _sentInvitationsLiveData = MutableLiveData<MutableList<InvitationItem>>()
+    val sentInvitationsLiveData = _sentInvitationsLiveData
+
+    private val _receivedInvitationsLiveData = MutableLiveData<MutableList<InvitationItem>>()
+    val receivedInvitationLiveData = _receivedInvitationsLiveData
+
+    init {
+        _sentInvitationsLiveData.value = ArrayList()
+        _receivedInvitationsLiveData.value = ArrayList()
+    }
+
+    fun getInvitations(context: Context) {
+        viewModelScope.launch {
+            try {
+                val response = Api.getApiService(context).getInvitations()
+
+                for (invitation in response.sent) {
+                    when (invitation.status) {
+                        "accepted" -> {
+                            addContact(Contact(
+                                serverId = invitation.invitee.id.toLong(),
+                                email = invitation.invitee.email
+                            ))
+                        }
+                    }
+
+                    _sentInvitationsLiveData.value?.add(InvitationItem(
+                        invitation.id,
+                        invitation.invitee.email,
+                        invitation.status
+                    ))
+                }
+
+                // notify recyclerview
+                _sentInvitationsLiveData.value = _sentInvitationsLiveData.value
+
+                for (invitation in response.received) {
+                    _receivedInvitationsLiveData.value?.add(InvitationItem(
+                        invitation.id,
+                        invitation.inviter.email,
+                        invitation.status
+                    ))
+                }
+
+                // notify recyclerview
+                _receivedInvitationsLiveData.value = _receivedInvitationsLiveData.value
+            } catch (e: Exception) {
+                Toast.makeText(
+                    context,
+                    e.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    fun acceptInvitation(context: Context, id: Int, email: String) {
+        viewModelScope.launch {
+            try {
+                val response = Api.getApiService(context)
+                    .acceptOrRejectInvitation(id, InvitationStatusRequest("accepted"))
+
+                if (response.code() != 204) {
+                    Toast.makeText(
+                        context,
+                        "Failed to accept invitation",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    addContact(Contact(
+                        serverId = id.toLong(),
+                        email = email
+                    ))
+                }
+            } catch (e: Exception) {
+                Toast.makeText(
+                    context,
+                    e.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    fun rejectInvitation(context: Context, id: Int) {
+        viewModelScope.launch {
+            try {
+                val response = Api.getApiService(context)
+                    .acceptOrRejectInvitation(id, InvitationStatusRequest("rejected"))
+
+                if (response.code() != 204) {
+                    Toast.makeText(
+                        context,
+                        "Failed to reject invitation",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(
+                    context,
+                    e.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    fun cancelInvitation(context: Context, id: Int) {
+        viewModelScope.launch {
+            try {
+                val response = Api.getApiService(context)
+                    .cancelInvitation(id)
+
+                if (response.code() != 204) {
+                    Toast.makeText(
+                        context,
+                        "Failed to cancel invitation",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(
+                    context,
+                    e.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun addContact(contact: Contact) {
+        mainActivityDao.insert(contact)
+        mainActivityDao.insert(Conversation(
+            contact.email,
+            contact.id
+        ))
+    }
+}
+
+class InvitationsViewModelFactory(
+    private val mainActivityDao: MainActivityDao
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(InvitationsViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return InvitationsViewModel(mainActivityDao) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}

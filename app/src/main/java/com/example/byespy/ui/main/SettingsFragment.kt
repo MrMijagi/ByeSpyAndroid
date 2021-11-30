@@ -1,11 +1,18 @@
 package com.example.byespy.ui.main
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -13,7 +20,8 @@ import com.example.byespy.ByeSpyApplication
 import com.example.byespy.databinding.FragmentSettingsBinding
 import com.example.byespy.network.SessionManager
 import com.example.byespy.ui.StartActivity
-import com.example.byespy.ui.chat.ChatActivity
+import com.example.byespy.ui.invitations.InvitationsActivity
+import com.example.byespy.ui.new_contact.NewContactActivity
 
 class SettingsFragment : Fragment() {
 
@@ -23,6 +31,7 @@ class SettingsFragment : Fragment() {
             (activity?.application as ByeSpyApplication).database.mainActivityDao()
         )
     }
+    private lateinit var startAddContactActivity: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +40,9 @@ class SettingsFragment : Fragment() {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
         val emailValue = binding.emailValue
-        val button = binding.buttonLogout
-        val chat = binding.buttonAddContact
+        val logoutButton = binding.buttonLogout
+        val contactButton = binding.buttonAddContact
+        val invitationsButton = binding.buttonResetPassword
 
         mainViewModel.getProfile(requireContext())
 
@@ -42,7 +52,44 @@ class SettingsFragment : Fragment() {
             emailValue.text = profileResponse.email
         })
 
-        button.setOnClickListener {
+        startAddContactActivity = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            when (result.resultCode) {
+                RESULT_OK -> {
+                    val email = result.data?.getStringExtra("email") ?: ""
+                    Log.d("EMAIL2", email)
+                    Log.d("EMAIL3", (email == "").toString())
+
+                    if (email != "") {
+                        mainViewModel.sendInvitation(requireContext(), email)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Email incorrect",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                RESULT_CANCELED -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Canceled",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+
+        mainViewModel.sendInvitationLiveData.observe(viewLifecycleOwner, Observer { returned ->
+            Toast.makeText(
+                requireContext(),
+                if (returned) "Invitation sent" else "Email incorrect / already exists",
+                Toast.LENGTH_LONG
+            ).show()
+        })
+
+        logoutButton.setOnClickListener {
             // reset both tokens
             val sessionManager = SessionManager(requireContext())
             sessionManager.logout()
@@ -56,8 +103,13 @@ class SettingsFragment : Fragment() {
             activity?.finish()
         }
 
-        chat.setOnClickListener {
-            val intent = Intent(requireContext(), ChatActivity::class.java)
+        contactButton.setOnClickListener {
+            val intent = Intent(requireContext(), NewContactActivity::class.java)
+            startAddContactActivity.launch(intent)
+        }
+
+        invitationsButton.setOnClickListener {
+            val intent = Intent(requireContext(), InvitationsActivity::class.java)
             startActivity(intent)
         }
 

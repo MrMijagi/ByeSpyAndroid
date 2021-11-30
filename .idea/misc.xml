@@ -3,21 +3,32 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/checkmark.xml" value="0.2203125" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/close.xml" value="0.2203125" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/ic_chatbubbles.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/ic_paper_plane.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/ic_people.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/invitation_background.xml" value="0.196875" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/invitation_background_red.xml" value="0.196875" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/invitation_background_yellow.xml" value="0.196875" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/drawable/message_other_background.xml" value="0.196875" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.28671875" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout-w936dp/activity_login.xml" value="0.275" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_chat.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_code_verification.xml" value="0.33" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_contact.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_invitations.xml" value="0.18072916666666666" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_new_contact.xml" value="0.1" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/activity_new_conversation.xml" value="0.33" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/conversation_item.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/fragment_conversations.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/fragment_conversations.xml" value="0.1" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/invitation_received.xml" value="0.18072916666666666" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/invitation_sent.xml" value="0.18072916666666666" />
+        <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/message_other_item.xml" value="0.18072916666666666" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/register_activity.xml" value="0.1" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/start_activity.xml" value="0.1640625" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/menu/chat_menu.xml" value="0.1" />
