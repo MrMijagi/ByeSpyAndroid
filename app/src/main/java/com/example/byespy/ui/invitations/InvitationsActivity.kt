@@ -1,7 +1,11 @@
 package com.example.byespy.ui.invitations
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -13,6 +17,7 @@ import com.example.byespy.databinding.ActivityInvitationsBinding
 import com.example.byespy.network.response.InvitationReceived
 import com.example.byespy.ui.adapter.InvitationReceivedAdapter
 import com.example.byespy.ui.adapter.InvitationSentAdapter
+import com.example.byespy.ui.contact.ContactActivity
 
 class InvitationsActivity : AppCompatActivity() {
 
@@ -45,12 +50,22 @@ class InvitationsActivity : AppCompatActivity() {
         receivedRecyclerView.adapter = receivedRecyclerViewAdapter
 
         invitationsViewModel.sentInvitationsLiveData.observe(this, Observer {
+            sentRecyclerViewAdapter.submitList(null)
             sentRecyclerViewAdapter.submitList(it)
         })
 
         invitationsViewModel.receivedInvitationLiveData.observe(this, Observer {
+            receivedRecyclerViewAdapter.submitList(null)
             receivedRecyclerViewAdapter.submitList(it)
         })
+
+        invitationsViewModel.getInvitations(applicationContext)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.invitations_menu, menu)
+        return true
     }
 
     private fun adapterOnCancel(invitationItem: InvitationItem) {
@@ -74,6 +89,10 @@ class InvitationsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.refresh_invitations -> {
+                invitationsViewModel.getInvitations(applicationContext)
+                true
+            }
             R.id.home -> {
                 setResult(RESULT_OK)
                 finish()

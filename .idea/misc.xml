@@ -32,6 +32,8 @@
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/register_activity.xml" value="0.1" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/layout/start_activity.xml" value="0.1640625" />
         <entry key="..\:/Users/Dawid Bilinski/AndroidStudioProjects/ByeSpy/app/src/main/res/menu/chat_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_invitations.xml" value="0.11979166666666667" />
+        <entry key="app/src/main/res/menu/invitations_menu.xml" value="0.11979166666666667" />
       </map>
     </option>
   </component>

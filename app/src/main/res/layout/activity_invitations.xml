@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/invitations_received"
+        android:text="@string/invitations_sent"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/app_name_gradient_start"
         android:textSize="34sp"

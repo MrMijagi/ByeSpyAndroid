@@ -28,6 +28,9 @@ class InvitationsViewModel(
     }
 
     fun getInvitations(context: Context) {
+        _sentInvitationsLiveData.value = ArrayList()
+        _receivedInvitationsLiveData.value = ArrayList()
+
         viewModelScope.launch {
             try {
                 val response = Api.getApiService(context).getInvitations()
@@ -35,10 +38,22 @@ class InvitationsViewModel(
                 for (invitation in response.sent) {
                     when (invitation.status) {
                         "accepted" -> {
+                            // add new conversation
                             addContact(Contact(
                                 serverId = invitation.invitee.id.toLong(),
                                 email = invitation.invitee.email
                             ))
+
+                            // delete invitation from server
+                            Api.getApiService(context).cancelInvitation(
+                                invitation.id
+                            )
+                        }
+                        "rejected" -> {
+                            // delete invitation from server
+                            Api.getApiService(context).cancelInvitation(
+                                invitation.id
+                            )
                         }
                     }
 
@@ -98,6 +113,7 @@ class InvitationsViewModel(
                 ).show()
             }
         }
+        getInvitations(context)
     }
 
     fun rejectInvitation(context: Context, id: Int) {
@@ -121,6 +137,7 @@ class InvitationsViewModel(
                 ).show()
             }
         }
+        getInvitations(context)
     }
 
     fun cancelInvitation(context: Context, id: Int) {
@@ -144,6 +161,7 @@ class InvitationsViewModel(
                 ).show()
             }
         }
+        getInvitations(context)
     }
 
     private fun addContact(contact: Contact) {

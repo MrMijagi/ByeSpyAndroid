@@ -5,5 +5,5 @@ import com.squareup.moshi.Json
 data class InvitationUser(
     @Json(name = "id") val id: Int,
     @Json(name = "email") val email: String,
-    @Json(name = "username") val username: String
+    @Json(name = "username") val username: String?
 )

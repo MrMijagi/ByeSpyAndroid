@@ -15,7 +15,7 @@ import retrofit2.http.*
 import java.util.*
 
 // replace ip with correct one
-private const val BASE_URL = "http://192.168.8.109:4000/api/"
+private const val BASE_URL = "http://10.182.243.189:4000/api/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())

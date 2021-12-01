@@ -26,7 +26,7 @@ class NewContactActivity : AppCompatActivity() {
             Log.d("EMAIL", email.text.toString())
             intent.putExtra("email", email.text.toString())
 
-            setResult(RESULT_OK)
+            setResult(RESULT_OK, intent)
             finish()
         }
     }
