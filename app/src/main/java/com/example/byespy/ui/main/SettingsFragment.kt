@@ -22,6 +22,7 @@ import com.example.byespy.network.SessionManager
 import com.example.byespy.ui.StartActivity
 import com.example.byespy.ui.invitations.InvitationsActivity
 import com.example.byespy.ui.new_contact.NewContactActivity
+import com.example.byespy.ui.profile.ProfileActivity
 
 class SettingsFragment : Fragment() {
 
@@ -39,16 +40,17 @@ class SettingsFragment : Fragment() {
     ): View? {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
+        val usernameValue = binding.usernameValue
         val emailValue = binding.emailValue
         val logoutButton = binding.buttonLogout
         val contactButton = binding.buttonAddContact
         val invitationsButton = binding.buttonResetPassword
-
-        mainViewModel.getProfile(requireContext())
+        val editButton = binding.buttonEditProfile
 
         mainViewModel.profileResponse.observe(viewLifecycleOwner, Observer {
             val profileResponse = it ?: return@Observer
 
+            usernameValue.text = profileResponse.username
             emailValue.text = profileResponse.email
         })
 
@@ -70,13 +72,6 @@ class SettingsFragment : Fragment() {
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                }
-                RESULT_CANCELED -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Canceled",
-                        Toast.LENGTH_LONG
-                    ).show()
                 }
             }
         }
@@ -113,6 +108,17 @@ class SettingsFragment : Fragment() {
             startActivity(intent)
         }
 
+        editButton.setOnClickListener {
+            val intent = Intent(requireContext(), ProfileActivity::class.java)
+            startActivity(intent)
+        }
+
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        mainViewModel.getProfile(requireContext())
     }
 }

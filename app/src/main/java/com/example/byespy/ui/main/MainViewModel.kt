@@ -40,7 +40,7 @@ class MainViewModel(
                 val response = Api.getApiService(context).getProfile()
                 _profileResponse.value = response
             } catch (e: Exception) {
-                _profileResponse.value = ProfileResponse(-1, "Error while loading email.")
+                _profileResponse.value = ProfileResponse(-1, "Error while loading email.", "Error while loading username")
             }
         }
     }
@@ -57,7 +57,7 @@ class MainViewModel(
         ))
     }
 
-    fun refreshToken(context: Context) {
+    private fun refreshToken(context: Context) {
         viewModelScope.launch {
             try {
                 val sessionManager = SessionManager(context)

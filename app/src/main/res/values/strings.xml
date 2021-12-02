@@ -49,4 +49,14 @@
     <string name="send_invite">Send invitation</string>
     <string name="invitations">Invitations</string>
     <string name="refresh_invitations">Refresh</string>
+    <string name="profile">Profile</string>
+    <string name="prompt_username">New username</string>
+    <string name="save_username">Save username</string>
+    <string name="prompt_new_password">New password</string>
+    <string name="prompt_new_password_confirm">Confirm new password</string>
+    <string name="prompt_current_password">Current password</string>
+    <string name="save_password">Save password</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_username">Change username</string>
+    <string name="change_password">Change password</string>
 </resources>

@@ -93,7 +93,7 @@ class InvitationsActivity : AppCompatActivity() {
                 invitationsViewModel.getInvitations(applicationContext)
                 true
             }
-            R.id.home -> {
+            android.R.id.home -> {
                 setResult(RESULT_OK)
                 finish()
                 true

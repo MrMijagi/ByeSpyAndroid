@@ -76,7 +76,7 @@ class NewConversationActivity : AppCompatActivity() {
             android.R.id.home -> {
                 setResult(Activity.RESULT_CANCELED)
                 finish()
-                return true
+                true
             }
 
             else -> super.onOptionsItemSelected(item)

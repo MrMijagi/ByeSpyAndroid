@@ -40,7 +40,7 @@ class ChatActivity : AppCompatActivity(), MessageListener {
     }
 
     companion object {
-        const val WEB_SOCKET_URL = "ws://10.182.243.189:4000/cable"
+        const val WEB_SOCKET_URL = "ws://192.168.8.109:4000/cable"
         const val TAG = "chat"
     }
 

@@ -1,7 +1,6 @@
 package com.example.byespy.ui.login
 
 import android.R
-import android.app.Activity
 import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -46,7 +45,9 @@ class LoginActivity : AppCompatActivity() {
             )
         }
 
-        startCodeVerificationActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        startCodeVerificationActivity = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             when (result.resultCode) {
                 RESULT_OK -> {
                     loginViewModel.login(

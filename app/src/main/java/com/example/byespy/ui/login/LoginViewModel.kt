@@ -24,11 +24,8 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = Api.getApiService(context).authorizeUser(username, password)
-                if (response.isSuccessful) {
-                    _authorizationResult.value = response.isSuccessful
-                } else {
-                    _authorizationResult.value = false
-                }
+
+                _authorizationResult.value = response.userExists
             } catch (e: Exception) {
                 _toastMessage.value = e.message
             }

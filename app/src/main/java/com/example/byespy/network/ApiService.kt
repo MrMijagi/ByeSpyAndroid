@@ -1,6 +1,7 @@
 package com.example.byespy.network
 
 import android.content.Context
+import android.provider.ContactsContract
 import com.example.byespy.network.requests.*
 import com.example.byespy.network.response.*
 import com.squareup.moshi.Moshi
@@ -15,7 +16,7 @@ import retrofit2.http.*
 import java.util.*
 
 // replace ip with correct one
-private const val BASE_URL = "http://10.182.243.189:4000/api/"
+private const val BASE_URL = "http://192.168.8.109:4000/api/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -29,13 +30,19 @@ interface ApiService {
     @POST("oauth/revoke")
     suspend fun refreshToken(@Body request: RefreshTokenRequest): RefreshTokenResponse
     @GET("authorize_user_first_step")
-    suspend fun authorizeUser(@Query("email") email: String, @Query("password") password: String): Response<AuthorizeUserResponse>
+    suspend fun authorizeUser(@Query("email") email: String, @Query("password") password: String): AuthorizeUserResponse
     @POST("sign_up")
     suspend fun signUp(@Body request: RegistrationRequest): Response<Unit>
 
     // profile
     @GET("profile")
     suspend fun getProfile(): ProfileResponse
+    @GET("profile/validate_password")
+    suspend fun validatePassword(@Query("id") id: Int, @Query("value") value: String): Response<Boolean>
+    @PUT("profile")
+    suspend fun editUsername(@Body request: ChangeUsernameRequest): Response<ProfileResponse>
+    @PUT("profile")
+    suspend fun editPassword(@Body request: ChangePasswordRequest): Response<ProfileResponse>
 
     // messages
     @POST("messages/save_message")
@@ -48,7 +55,7 @@ interface ApiService {
     suspend fun sendInvitation(@Body request: InvitationRequest): Response<Unit>
     @DELETE("invitations/{id}")
     suspend fun cancelInvitation(@Path("id") id: Int): Response<Unit>
-    @POST("invitations/{id}")
+    @PUT("invitations/{id}")
     suspend fun acceptOrRejectInvitation(@Path("id") id: Int, @Body request: InvitationStatusRequest): Response<Unit>
     @GET("invitations/check")
     suspend fun checkEmail(@Query("value") value: String): Response<Unit>
