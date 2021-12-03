@@ -73,7 +73,7 @@ class ChatActivity : AppCompatActivity(), MessageListener {
             chatViewModel.sendMessage(
                 applicationContext,
                 inputText.text.toString(),
-                chatViewModel.getEmailFromConversationId()
+                chatViewModel.getServerIdByConversationId()
             )
 
             inputText.text?.clear()

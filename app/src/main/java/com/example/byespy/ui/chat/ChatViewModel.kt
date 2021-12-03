@@ -22,7 +22,7 @@ class ChatViewModel(
 
     fun messages(): Flow<List<MessageItem>> = chatActivityDao.getMessagesByConversationId(conversationId)
 
-    fun getEmailFromConversationId() = chatActivityDao.getEmailByConversationId(conversationId)
+    fun getServerIdByConversationId() = chatActivityDao.getServerIdByConversationId(conversationId)
 
     // add own message to list
     fun insertOwnMessage(content: String) {
@@ -47,11 +47,11 @@ class ChatViewModel(
     }
 
     // send request to server
-    fun sendMessage(context: Context, content: String, mailTo: String) {
+    fun sendMessage(context: Context, content: String, mailTo: Long) {
         val message = SaveMessageRequest(
             type = "type",
             content = content,
-            receiverId = 2,
+            receiverId = mailTo.toInt(),
             sendAt = Calendar.getInstance().time
         )
 

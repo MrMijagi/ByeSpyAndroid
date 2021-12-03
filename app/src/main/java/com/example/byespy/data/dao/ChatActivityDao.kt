@@ -23,9 +23,9 @@ interface ChatActivityDao {
             "WHERE message_table.conversation_id = :id")
     fun getMessagesByConversationId(id: Long): Flow<List<MessageItem>>
 
-    @Query("SELECT contact_table.email " +
+    @Query("SELECT contact_table.server_id " +
             "FROM conversation_table " +
             "INNER JOIN contact_table ON contact_table.id = conversation_table.contact_id " +
             "WHERE conversation_table.id = :id")
-    fun getEmailByConversationId(id: Long): String
+    fun getServerIdByConversationId(id: Long): Long
 }

@@ -3,6 +3,7 @@ package com.example.byespy.ui.invitations
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.*
+import com.example.byespy.ByeSpyApplication
 import com.example.byespy.data.dao.MainActivityDao
 import com.example.byespy.data.entity.Contact
 import com.example.byespy.data.entity.Conversation
@@ -165,10 +166,10 @@ class InvitationsViewModel(
     }
 
     private fun addContact(contact: Contact) {
-        mainActivityDao.insert(contact)
+        val contactId = mainActivityDao.insert(contact)
         mainActivityDao.insert(Conversation(
             contact.email,
-            contact.id
+            contactId
         ))
     }
 }
