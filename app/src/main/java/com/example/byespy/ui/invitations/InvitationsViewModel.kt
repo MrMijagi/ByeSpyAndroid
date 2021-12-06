@@ -60,6 +60,7 @@ class InvitationsViewModel(
 
                     _sentInvitationsLiveData.value?.add(InvitationItem(
                         invitation.id,
+                        0,
                         invitation.invitee.email,
                         invitation.status
                     ))
@@ -71,6 +72,7 @@ class InvitationsViewModel(
                 for (invitation in response.received) {
                     _receivedInvitationsLiveData.value?.add(InvitationItem(
                         invitation.id,
+                        invitation.inviter.id,
                         invitation.inviter.email,
                         invitation.status
                     ))
@@ -88,7 +90,7 @@ class InvitationsViewModel(
         }
     }
 
-    fun acceptInvitation(context: Context, id: Int, email: String) {
+    fun acceptInvitation(context: Context, id: Int, userId: Int, email: String) {
         viewModelScope.launch {
             try {
                 val response = Api.getApiService(context)
@@ -102,7 +104,7 @@ class InvitationsViewModel(
                     ).show()
                 } else {
                     addContact(Contact(
-                        serverId = id.toLong(),
+                        serverId = userId.toLong(),
                         email = email
                     ))
                 }

@@ -76,6 +76,7 @@ class InvitationsActivity : AppCompatActivity() {
         invitationsViewModel.acceptInvitation(
             applicationContext,
             invitationItem.id,
+            invitationItem.userId,
             invitationItem.email
         )
     }
