@@ -45,18 +45,6 @@ class MainViewModel(
         }
     }
 
-    fun addConversation(email: String, name: String, image: String) {
-        val contactId = mainActivityDao.insert(Contact(
-            email = email,
-            serverId = 0            // not used for now
-        ))
-
-        mainActivityDao.insert(Conversation(
-            name = name,
-            contactId = contactId
-        ))
-    }
-
     private fun refreshToken(context: Context) {
         viewModelScope.launch {
             try {

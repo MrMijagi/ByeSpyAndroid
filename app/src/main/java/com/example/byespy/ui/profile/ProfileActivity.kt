@@ -3,10 +3,12 @@ package com.example.byespy.ui.profile
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.example.byespy.databinding.ActivityProfileBinding
+import com.example.byespy.network.SessionManager
 
 class ProfileActivity : AppCompatActivity() {
 

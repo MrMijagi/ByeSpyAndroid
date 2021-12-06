@@ -12,6 +12,9 @@ class SessionManager(context: Context) {
     companion object {
         const val USER_TOKEN = "user_token"
         const val REFRESH_TOKEN = "refresh_token"
+        const val USER_ID = "user_id"
+        const val USER_EMAIL = "user_email"
+        const val DEVICE_ID = "device_id"
     }
 
     // save token to shared preferences
@@ -36,6 +39,42 @@ class SessionManager(context: Context) {
     // get refresh token from shared preferences
     fun fetchRefreshToken(): String? {
         return prefs.getString(REFRESH_TOKEN, null)
+    }
+
+    // save server user id
+    fun saveUserId(id: Int) {
+        val editor = prefs.edit()
+        editor.putInt(USER_ID, id)
+        editor.apply()
+    }
+
+    // get server user id - returns -1 if not saved (not registered)
+    fun fetchUserId(): Int {
+        return prefs.getInt(USER_ID, -1)
+    }
+
+    // save user email
+    fun saveUserEmail(email: String) {
+        val editor = prefs.edit()
+        editor.putString(USER_EMAIL, email)
+        editor.apply()
+    }
+
+    // get user email
+    fun fetchUserEmail(): String? {
+        return prefs.getString(USER_EMAIL, null)
+    }
+
+    // save device id
+    fun saveDeviceId(id: Int) {
+        val editor = prefs.edit()
+        editor.putInt(DEVICE_ID, id)
+        editor.apply()
+    }
+
+    // get device id - returns -1 if not saved
+    fun fetchDeviceId(): Int {
+        return prefs.getInt(DEVICE_ID, -1)
     }
 
     // reset keys from prefs

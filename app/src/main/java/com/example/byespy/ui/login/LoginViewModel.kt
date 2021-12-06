@@ -1,11 +1,15 @@
 package com.example.byespy.ui.login
 
 import android.content.Context
+import android.se.omapi.Session
+import android.widget.Toast
 import androidx.lifecycle.*
 
 import com.example.byespy.network.Api
+import com.example.byespy.network.SessionManager
 import com.example.byespy.network.requests.LoginRequest
 import com.example.byespy.network.response.LoginResponse
+import com.example.byespy.network.response.ProfileResponse
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -43,6 +47,26 @@ class LoginViewModel : ViewModel() {
                 _loginResult.value = LoginResult(error = 1, success =  LoginResponse(e.message?: "", ""))
             }
          }
+    }
+
+    // no need to check for token since this is called after user logs in
+    fun saveProfile(context: Context) {
+        viewModelScope.launch {
+            try {
+                val response = Api.getApiService(context).getProfile()
+
+                val sessionManager = SessionManager(context)
+                sessionManager.saveUserId(response.id)
+                sessionManager.saveUserEmail(response.email)
+                sessionManager.saveDeviceId(1)         // for now
+            } catch (e: Exception) {
+                Toast.makeText(
+                    context,
+                    "Couldn't save profile data!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 }
 

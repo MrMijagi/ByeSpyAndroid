@@ -104,6 +104,11 @@ class LoginActivity : AppCompatActivity() {
                 sessionManager.saveAuthToken(loginResult.success.accessToken)
                 sessionManager.saveRefreshToken(loginResult.success.refreshToken)
 
+                // save user profile if not saved yet
+                if (sessionManager.fetchUserId() == -1) {
+                    loginViewModel.saveProfile(this)
+                }
+
                 // go to main activity
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
