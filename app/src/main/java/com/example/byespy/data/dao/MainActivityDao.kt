@@ -17,6 +17,7 @@ interface MainActivityDao {
         "SELECT conversation_table.id AS id, " +
                 "contact_table.email AS email, " +
                 "contact_table.username AS username, " +
+                "contact_table.image AS image, " +
                 "message_table.content AS lastMessage, " +
                 "message_table.is_own_message AS lastMessageOwn " +
                 "FROM conversation_table " +

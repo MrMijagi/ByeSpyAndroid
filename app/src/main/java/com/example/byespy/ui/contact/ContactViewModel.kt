@@ -1,9 +1,17 @@
 package com.example.byespy.ui.contact
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.byespy.data.dao.ContactActivityDao
+import com.example.byespy.data.entity.Contact
+import com.example.byespy.network.Api
+import com.example.byespy.network.response.ProfileResponse
+import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.lang.IllegalArgumentException
 
 class ContactViewModel(
@@ -11,8 +19,26 @@ class ContactViewModel(
     private val contactActivityDao: ContactActivityDao
     ) : ViewModel() {
 
-    fun getEmail(): String {
-        return contactActivityDao.getEmail(conversationId)
+    fun updateImage(context: Context) {
+        viewModelScope.launch {
+            try {
+                val contactId = contactActivityDao.getId(conversationId)
+                val response = Api.getApiService(context).getAvatar(contactId)
+                val image = response.body()?.substring((response.body()?.indexOf(',') ?: -1) + 1)
+
+                contactActivityDao.updateImage(image, contactId)
+            } catch (e: Exception) {
+                Toast.makeText(
+                    context,
+                    "updateImage fail",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    fun getContact(): Contact {
+        return contactActivityDao.getContact(conversationId)
     }
 
     fun clearMessages() {

@@ -25,6 +25,7 @@ class RegisterActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val email = binding.email
         val username = binding.username
         val password = binding.password
         val passwordCheck = binding.confirmPassword
@@ -36,6 +37,7 @@ class RegisterActivity : AppCompatActivity() {
             if (password.text.toString() == passwordCheck.text.toString()) {
                 registerViewModel.signUp(
                     applicationContext,
+                    email.text.toString(),
                     username.text.toString(),
                     password.text.toString()
                 )

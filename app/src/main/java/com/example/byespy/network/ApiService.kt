@@ -1,7 +1,6 @@
 package com.example.byespy.network
 
 import android.content.Context
-import android.provider.ContactsContract
 import com.example.byespy.network.requests.*
 import com.example.byespy.network.response.*
 import com.squareup.moshi.Moshi
@@ -45,10 +44,12 @@ interface ApiService {
     suspend fun editUsername(@Body request: ChangeUsernameRequest): Response<ProfileResponse>
     @PUT("profile")
     suspend fun editPassword(@Body request: ChangePasswordRequest): Response<ProfileResponse>
+    @GET("get_avatar/{id}")
+    suspend fun getAvatar(@Path("id") id: Long): Response<String>
 
     // messages
     @POST("messages/save_message")
-    suspend fun saveMessage(@Body request: SaveMessageRequest): Response<Object>
+    suspend fun saveMessage(@Body request: SaveMessageRequest): Response<Any>
 
     // pre keys bundle
     @POST("pre_keys_bundle")

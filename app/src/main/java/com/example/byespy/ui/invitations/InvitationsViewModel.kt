@@ -45,7 +45,8 @@ class InvitationsViewModel(
                             addContact(Contact(
                                 serverId = invitation.invitee.id.toLong(),
                                 email = invitation.invitee.email,
-                                username = null
+                                username = null,
+                                image = null
                             ))
 
                             // delete invitation from server
@@ -109,7 +110,8 @@ class InvitationsViewModel(
                     addContact(Contact(
                         serverId = userId.toLong(),
                         email = email,
-                        username = null
+                        username = null,
+                        image = null
                     ))
                 }
             } catch (e: Exception) {
