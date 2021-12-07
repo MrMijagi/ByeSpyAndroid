@@ -290,16 +290,23 @@ public final class LibsignalHelper {
             gsonBuilder.registerTypeAdapter(SignalProtocolAddress::class.java,
                 SignalProtocolAddressDeserializer()
             )
+            gsonBuilder.registerTypeAdapter(IdentityKey::class.java,
+                IdentityKeyDeserializer()
+            )
+            gsonBuilder.registerTypeAdapter(IdentityKey::class.java,
+                IdentityKeySerializer()
+            )
+
             return gsonBuilder.create()
         }
 
-        private fun ustringToByteArray(string: String): ByteArray {
+        public fun ustringToByteArray(string: String): ByteArray {
             val split = string.substring(1, string.length - 1).replace(" ", "").split(',')
             val uByteArray = UByteArray(split.size) { index -> split[index].toInt().toUByte() }
             return uByteArray.toByteArray()
         }
 
-        private fun byteArrayToUString(byteArray: ByteArray): String {
+        public fun byteArrayToUString(byteArray: ByteArray): String {
             val uByteArray = byteArray.toUByteArray()
             return uByteArray.contentToString()
         }
