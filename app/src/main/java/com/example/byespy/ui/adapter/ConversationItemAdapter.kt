@@ -1,11 +1,14 @@
 package com.example.byespy.ui.adapter
 
-import android.net.Uri
+import android.graphics.BitmapFactory
+import android.util.Base64.DEFAULT
+import android.util.Base64.decode
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.byespy.R
 import com.example.byespy.data.model.ConversationItem
 import com.example.byespy.databinding.ConversationItemBinding
 
@@ -41,8 +44,16 @@ class ConversationItemAdapter(private val onClick: (ConversationItem) -> Unit)
                 } else {
                     ""
                 }
-//                profileImage.setImageURI(Uri.parse(conversation.image))
-//                profileImage.clipToOutline = true
+
+                if (conversation.image != null) {
+                    val decodedString = decode(conversation.image, DEFAULT)
+                    val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+                    profileImage.setImageBitmap(decodedByte)
+                    //profileImage.clipToOutline = true
+                } else {
+                    profileImage.setImageResource(R.drawable.ic_person_small)
+                    //profileImage.clipToOutline = true
+                }
             }
         }
     }

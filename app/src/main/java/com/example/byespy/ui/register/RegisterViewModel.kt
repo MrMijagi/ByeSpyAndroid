@@ -14,12 +14,12 @@ class RegisterViewModel : ViewModel() {
     private val _signUpResult = MutableLiveData<Boolean>()
     val signUpResult: LiveData<Boolean> = _signUpResult
 
-    fun signUp(context: Context, username: String, password: String) {
+    fun signUp(context: Context, email: String, username: String, password: String) {
         viewModelScope.launch {
             try {
                 val response = Api.getApiService(context).signUp(
                     RegistrationRequest(
-                        User(username, password)
+                        User(email, username, password)
                     )
                 )
 

@@ -5,6 +5,6 @@ data class ConversationItem(
     val email: String,
     val username: String?,
     val lastMessage: String?,
-    val lastMessageOwn: Boolean?
-//    val image: String
+    val lastMessageOwn: Boolean?,
+    val image: String?
 )

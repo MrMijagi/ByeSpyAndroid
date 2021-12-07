@@ -10,7 +10,7 @@ data class Contact(
     val serverId: Long,
     val username: String?,
     val email: String,
-//    val image: String?
+    val image: String?
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

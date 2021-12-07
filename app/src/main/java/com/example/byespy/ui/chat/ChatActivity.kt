@@ -93,7 +93,6 @@ class ChatActivity : AppCompatActivity(), MessageListener {
         }
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
 
