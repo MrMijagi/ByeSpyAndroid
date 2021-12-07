@@ -22,8 +22,9 @@ class ContactViewModel(
     fun updateImage(context: Context) {
         viewModelScope.launch {
             try {
+                val serverId = contactActivityDao.getServerId(conversationId)
                 val contactId = contactActivityDao.getId(conversationId)
-                val response = Api.getApiService(context).getAvatar(contactId)
+                val response = Api.getApiService(context).getAvatar(serverId)
                 val image = response.body()?.substring((response.body()?.indexOf(',') ?: -1) + 1)
 
                 contactActivityDao.updateImage(image, contactId)

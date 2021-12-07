@@ -21,6 +21,12 @@ interface ContactActivityDao {
             "WHERE conversation_table.id = :conversationId")
     fun getId(conversationId: Long): Long
 
+    @Query("SELECT contact_table.server_id " +
+            "FROM conversation_table " +
+            "INNER JOIN contact_table ON contact_table.id = conversation_table.contact_id " +
+            "WHERE conversation_table.id = :conversationId")
+    fun getServerId(conversationId: Long): Long
+
     @Query("DELETE FROM message_table WHERE conversation_id = :conversationId")
     fun clearMessages(conversationId: Long)
 
