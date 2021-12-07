@@ -264,8 +264,11 @@ public final class LibsignalHelper {
                         decryptMessage(ciphertext, senderAddress, protocolStore),
                         Charsets.UTF_8
                     )
+                    val emailEndPosition = plaintextMessage.indexOf('/')
+                    val email = plaintextMessage.substring(0, emailEndPosition - 1)
+                    val restOfMessage = plaintextMessage.substring(emailEndPosition + 1)
                     saveStore(applicationContext, protocolStore)
-                    return Pair(plaintextMessage, receivedMessage.sentAt)
+                    return Pair(restOfMessage, receivedMessage.sentAt)
                 }
             }
             return null
