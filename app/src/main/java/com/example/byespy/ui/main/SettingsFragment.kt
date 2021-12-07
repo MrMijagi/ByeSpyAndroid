@@ -1,6 +1,5 @@
 package com.example.byespy.ui.main
 
-import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
@@ -19,7 +18,7 @@ import androidx.lifecycle.Observer
 import com.example.byespy.ByeSpyApplication
 import com.example.byespy.databinding.FragmentSettingsBinding
 import com.example.byespy.network.SessionManager
-import com.example.byespy.ui.StartActivity
+import com.example.byespy.ui.start.StartActivity
 import com.example.byespy.ui.invitations.InvitationsActivity
 import com.example.byespy.ui.new_contact.NewContactActivity
 import com.example.byespy.ui.profile.ProfileActivity

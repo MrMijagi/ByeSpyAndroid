@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.byespy.ByeSpyApplication
 import com.example.byespy.R
 import com.example.byespy.databinding.ActivityMainBinding
+import com.example.byespy.network.SessionManager
 import com.example.byespy.ui.adapter.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -28,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val sessionManager = SessionManager(this)
+        sessionManager.logPreferences("MAIN")
 
         val viewPager = binding.viewPager2
         val tabLayout = binding.tabLayout

@@ -59,4 +59,5 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="change_username">Change username</string>
     <string name="change_password">Change password</string>
+    <string name="change_user">Change user</string>
 </resources>

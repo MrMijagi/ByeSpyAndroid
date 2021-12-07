@@ -34,6 +34,9 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.password
         val login = binding.login
 
+        val sessionManager = SessionManager(this)
+        sessionManager.logPreferences("LOGIN")
+
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
 
         login.setOnClickListener {

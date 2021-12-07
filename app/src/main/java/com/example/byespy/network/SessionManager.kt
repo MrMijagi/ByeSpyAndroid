@@ -2,6 +2,7 @@ package com.example.byespy.network
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.byespy.R
 
 class SessionManager(context: Context) {
@@ -83,5 +84,29 @@ class SessionManager(context: Context) {
         editor.remove(USER_TOKEN)
         editor.remove(REFRESH_TOKEN)
         editor.apply()
+    }
+
+    // clear user info
+    fun clearUser() {
+        val editor = prefs.edit()
+        editor.remove(USER_ID)
+        editor.remove(USER_EMAIL)
+        editor.remove(DEVICE_ID)
+        editor.apply()
+    }
+
+    // for debugging purposes
+    fun logPreferences(tag: String) {
+        val userId = fetchUserId()
+        val userEmail = fetchUserEmail()
+        val deviceId = fetchDeviceId()
+        val authToken = fetchAuthToken()
+        val refreshToken = fetchRefreshToken()
+
+        Log.d(tag, "userId = $userId")
+        Log.d(tag, "userEmail = $userEmail")
+        Log.d(tag, "deviceId = $deviceId")
+        Log.d(tag, "authToken = $authToken")
+        Log.d(tag, "refreshToken = $refreshToken")
     }
 }

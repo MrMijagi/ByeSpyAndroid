@@ -22,6 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun contactActivityDao(): ContactActivityDao
     abstract fun chatActivityDao(): ChatActivityDao
     abstract fun mainActivityDao(): MainActivityDao
+    abstract fun reloginActivityDao(): ReloginActivityDao
 
     companion object {
         @Volatile
