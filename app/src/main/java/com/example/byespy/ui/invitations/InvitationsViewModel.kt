@@ -3,15 +3,17 @@ package com.example.byespy.ui.invitations
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.*
-import com.example.byespy.ByeSpyApplication
 import com.example.byespy.data.dao.MainActivityDao
 import com.example.byespy.data.entity.Contact
 import com.example.byespy.data.entity.Conversation
+import com.example.byespy.data.entity.Message
 import com.example.byespy.data.model.InvitationItem
 import com.example.byespy.network.Api
 import com.example.byespy.network.requests.InvitationStatusRequest
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
 
 class InvitationsViewModel(
     private val mainActivityDao: MainActivityDao
@@ -42,7 +44,8 @@ class InvitationsViewModel(
                             // add new conversation
                             addContact(Contact(
                                 serverId = invitation.invitee.id.toLong(),
-                                email = invitation.invitee.email
+                                email = invitation.invitee.email,
+                                username = null
                             ))
 
                             // delete invitation from server
@@ -105,7 +108,8 @@ class InvitationsViewModel(
                 } else {
                     addContact(Contact(
                         serverId = userId.toLong(),
-                        email = email
+                        email = email,
+                        username = null
                     ))
                 }
             } catch (e: Exception) {
@@ -169,9 +173,14 @@ class InvitationsViewModel(
 
     private fun addContact(contact: Contact) {
         val contactId = mainActivityDao.insert(contact)
-        mainActivityDao.insert(Conversation(
-            contact.email,
+        val conversationId = mainActivityDao.insert(Conversation(
             contactId
+        ))
+        mainActivityDao.insert(Message(
+            content = "Say hi!",
+            sentAt = Calendar.getInstance().time,
+            isOwnMessage = true,
+            conversationId = conversationId
         ))
     }
 }

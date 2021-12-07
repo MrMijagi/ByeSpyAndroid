@@ -30,8 +30,7 @@ class ChatViewModel(
             content = content,
             sentAt = Calendar.getInstance().time,
             isOwnMessage = true,
-            conversationId = conversationId,
-            threadId = 0
+            conversationId = conversationId
         ))
     }
 
@@ -41,8 +40,7 @@ class ChatViewModel(
             content = content,
             sentAt = createdAt,
             isOwnMessage = false,
-            conversationId = conversationId,
-            threadId = 0
+            conversationId = conversationId
         ))
     }
 }

@@ -30,8 +30,17 @@ class ConversationItemAdapter(private val onClick: (ConversationItem) -> Unit)
             currentConversationItem = conversation
 
             with(binding) {
-                conversationTitle.text = conversation.title
-//                conversationLastMessage.text = conversation.lastMessage
+                conversationTitle.text = conversation.username ?: conversation.email
+
+                conversationLastMessage.text = if (conversation.lastMessage != null) {
+                    if (conversation.lastMessageOwn == true) {
+                        "You: ${conversation.lastMessage}"
+                    } else {
+                        conversation.lastMessage
+                    }
+                } else {
+                    ""
+                }
 //                profileImage.setImageURI(Uri.parse(conversation.image))
 //                profileImage.clipToOutline = true
             }

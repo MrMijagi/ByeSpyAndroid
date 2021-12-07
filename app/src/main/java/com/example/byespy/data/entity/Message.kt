@@ -13,9 +13,7 @@ data class Message(
     @ColumnInfo(name = "is_own_message")
     val isOwnMessage: Boolean,
     @ColumnInfo(name = "conversation_id")
-    val conversationId: Long,
-    @ColumnInfo(name = "thread_id")
-    val threadId: Long,
+    val conversationId: Long
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

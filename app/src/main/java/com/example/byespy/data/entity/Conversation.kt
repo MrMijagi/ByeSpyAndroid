@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "conversation_table")
 data class Conversation(
-    val name: String,
     @ColumnInfo(name = "contact_id")
     val contactId: Long,
 ) {

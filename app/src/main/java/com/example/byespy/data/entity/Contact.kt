@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 data class Contact(
     @ColumnInfo(name = "server_id")
     val serverId: Long,
+    val username: String?,
     val email: String,
 //    val image: String?
 ) {
