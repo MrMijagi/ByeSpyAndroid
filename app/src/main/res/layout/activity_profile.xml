@@ -26,21 +26,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.12" />
 
-    <TextView
-        android:id="@+id/change_username"
+    <Button
+        android:id="@+id/conversation_image_button"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/change_username"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/app_name_gradient_start"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:text="@string/choose_profile"
+        app:layout_constraintTop_toBottomOf="@id/guideline_top"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/profile_image_view"/>
+
+    <ImageView
+        android:id="@+id/profile_image_view"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@id/image_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/conversation_image_button"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save_image"
         app:layout_constraintBottom_toTopOf="@+id/username_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline_top" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image_view" />
 
     <EditText
         android:id="@+id/username_input"
@@ -55,7 +73,7 @@
         app:layout_constraintBottom_toTopOf="@+id/username_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change_username" />
+        app:layout_constraintTop_toBottomOf="@+id/image_button" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/username_button"
@@ -64,7 +82,6 @@
         android:text="@string/save_username"
         app:layout_constraintBottom_toTopOf="@+id/divider_password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username_input" />
 
@@ -76,23 +93,9 @@
         android:layout_marginEnd="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@id/username_button"
-        app:layout_constraintBottom_toTopOf="@id/change_password"
+        app:layout_constraintBottom_toTopOf="@id/current_password"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
-
-    <TextView
-        android:id="@+id/change_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/change_password"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/app_name_gradient_start"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/current_password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/divider_password" />
 
     <EditText
         android:id="@+id/current_password"
@@ -107,7 +110,7 @@
         app:layout_constraintBottom_toTopOf="@+id/new_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change_password" />
+        app:layout_constraintTop_toBottomOf="@+id/divider_password" />
 
     <EditText
         android:id="@+id/new_password"
@@ -145,17 +148,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save_password"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_password_confirm" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

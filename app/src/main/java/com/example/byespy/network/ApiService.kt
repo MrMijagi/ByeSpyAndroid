@@ -45,7 +45,7 @@ interface ApiService {
     @PUT("profile")
     suspend fun editPassword(@Body request: ChangePasswordRequest): Response<ProfileResponse>
     @GET("get_avatar/{id}")
-    suspend fun getAvatar(@Path("id") id: Long): Response<String>
+    suspend fun getAvatar(@Path("id") id: Long): Response<AvatarResponse>
 
     // messages
     @POST("messages/save_message")
