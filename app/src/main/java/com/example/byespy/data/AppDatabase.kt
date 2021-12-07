@@ -8,13 +8,15 @@ import androidx.room.TypeConverters
 import com.example.byespy.data.dao.*
 import com.example.byespy.data.entity.Contact
 import com.example.byespy.data.entity.Conversation
+import com.example.byespy.data.entity.Device
 import com.example.byespy.data.entity.Message
 
 @Database(entities = [
     Contact::class,
     Conversation::class,
-    Message::class
-                     ], version = 3)
+    Message::class,
+    Device::class
+                     ], version = 4)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun contactActivityDao(): ContactActivityDao
