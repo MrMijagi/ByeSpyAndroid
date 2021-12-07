@@ -1,6 +1,8 @@
 package com.example.byespy.ui.chat
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,16 +12,15 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.lifecycle.coroutineScope
 import com.example.byespy.ByeSpyApplication
+import com.example.byespy.libsignal.LibsignalHelper
 import com.example.byespy.R
 import com.example.byespy.ui.adapter.MessageItemAdapter
-import com.example.byespy.data.model.MessageItem
 import com.example.byespy.databinding.ActivityChatBinding
-import com.example.byespy.network.websocket.Message
+
 import com.example.byespy.network.websocket.MessageListener
 import com.example.byespy.network.websocket.MessageReceived
 import com.example.byespy.network.websocket.WebSocketManager
 import com.example.byespy.ui.contact.ContactActivity
-import com.example.byespy.ui.main.MainActivity
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
@@ -27,6 +28,8 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import org.whispersystems.libsignal.state.SignalProtocolStore
+import org.whispersystems.libsignal.state.impl.InMemorySignalProtocolStore
 import java.util.*
 
 class ChatActivity : AppCompatActivity(), MessageListener {
@@ -40,7 +43,7 @@ class ChatActivity : AppCompatActivity(), MessageListener {
     }
 
     companion object {
-        const val WEB_SOCKET_URL = "ws://192.168.8.109:4000/cable"
+        const val WEB_SOCKET_URL = "ws://192.168.50.141:4000/cable"
         const val TAG = "chat"
     }
 
@@ -67,23 +70,29 @@ class ChatActivity : AppCompatActivity(), MessageListener {
         val inputText = binding.outlinedTextFieldInside
 
         sendButton.setOnClickListener {
-            chatViewModel.insertOwnMessage(inputText.text.toString())
+            val receiverUserId = chatViewModel.getServerIdByConversationId().toInt()
 
-            // send message to server
-            chatViewModel.sendMessage(
-                applicationContext,
-                inputText.text.toString(),
-                chatViewModel.getServerIdByConversationId()
-            )
+            lifecycle.coroutineScope.launch {
+                try {
+                    LibsignalHelper.sendMessage(inputText.text.toString(), receiverUserId, applicationContext)
 
-            inputText.text?.clear()
-
-            recyclerView.scrollToPosition(recyclerViewAdapter.itemCount - 1)
+                    chatViewModel.insertOwnMessage(inputText.text.toString())
+                    inputText.text?.clear()
+                    recyclerView.scrollToPosition(recyclerViewAdapter.itemCount - 1)
+                } catch(e: Exception) {
+                    Log.e("abc", e.stackTraceToString())
+                }
+            }
         }
 
         WebSocketManager.init(WEB_SOCKET_URL, this)
         WebSocketManager.connect()
+
+        lifecycle.coroutineScope.launch {
+            LibsignalHelper.getStore(applicationContext)
+        }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -116,22 +125,19 @@ class ChatActivity : AppCompatActivity(), MessageListener {
     }
 
     private fun receiveMessage(message: String?) {
-        Log.d(TAG, message ?: "nothing")
-
-        message?.let {
-            val moshi = Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .add(Date::class.java, Rfc3339DateJsonAdapter())
-                .build()
-            val adapter: JsonAdapter<MessageReceived> =
-                moshi.adapter(MessageReceived::class.java)
-            val messageObject = adapter.fromJson(it)
-
-            if (messageObject != null) {
-                chatViewModel.insertOtherMessage(
-                    messageObject.content,
-                    messageObject.createdAt
-                )
+        lifecycle.coroutineScope.launch {
+            try {
+                if (message != null) {
+                    val messageToInsert = LibsignalHelper.onMessageReceived(message, applicationContext)
+                    if(messageToInsert != null) {
+                        chatViewModel.insertOtherMessage(
+                            messageToInsert.first,
+                            messageToInsert.second
+                        )
+                    }
+                }
+            } catch(e: Exception) {
+                Log.e(TAG, e.stackTraceToString())
             }
         }
     }

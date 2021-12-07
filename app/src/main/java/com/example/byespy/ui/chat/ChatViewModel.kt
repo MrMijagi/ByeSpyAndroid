@@ -45,26 +45,6 @@ class ChatViewModel(
             threadId = 0
         ))
     }
-
-    // send request to server
-    fun sendMessage(context: Context, content: String, mailTo: Long) {
-        val message = SaveMessageRequest(
-            type = "type",
-            content = content,
-            receiverId = mailTo.toInt(),
-            sendAt = Calendar.getInstance().time
-        )
-
-        viewModelScope.launch {
-            try {
-                val response = Api.getApiService(context).saveMessage(message)
-                Log.d("chat", response.isSuccessful.toString())
-            } catch (e: Exception) {
-                Log.e("chat", "error on saveMessage")
-                Log.e("chat", e.toString())
-            }
-         }
-    }
 }
 
 class ChatViewModelFactory(

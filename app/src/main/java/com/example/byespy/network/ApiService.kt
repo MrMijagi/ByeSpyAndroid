@@ -8,7 +8,9 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -32,7 +34,7 @@ interface ApiService {
     @GET("authorize_user_first_step")
     suspend fun authorizeUser(@Query("email") email: String, @Query("password") password: String): AuthorizeUserResponse
     @POST("sign_up")
-    suspend fun signUp(@Body request: RegistrationRequest): Response<Unit>
+    suspend fun signUp(@Body request: RegistrationRequest): Response<ResponseBody>
 
     // profile
     @GET("profile")
@@ -46,7 +48,11 @@ interface ApiService {
 
     // messages
     @POST("messages/save_message")
-    suspend fun saveMessage(@Body request: SaveMessageRequest): Response<Unit>
+    suspend fun saveMessage(@Body request: SaveMessageRequest): Response<Object>
+
+    // pre keys bundle
+    @POST("pre_keys_bundle")
+    suspend fun sendPreKeysBundle(@Body request: SendPreKeysBundleRequest): Response<SendPreKeysBundleResponse>
 
     // invitations
     @GET("invitations")

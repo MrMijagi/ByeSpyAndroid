@@ -34,6 +34,8 @@
             android:exported="true" />
         <activity
             android:name=".ui.chat.ChatActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
