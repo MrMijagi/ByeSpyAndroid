@@ -8,7 +8,7 @@ data class MessageSentInvalidDevicesResponse(
 
 data class DeviceResponse(
     @Json(name = "device_id") val deviceId: Int,
-    @Json(name = "prekey_bundle") val preKeyBundle: PreKeyBundle
+    @Json(name = "prekey_bundle") val preKeyBundle: PreKeyBundle? = null
 )
 
 data class PreKeyBundle(

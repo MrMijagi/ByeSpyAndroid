@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.example.byespy.R
+import com.example.byespy.libsignal.LibsignalHelper
 
 class SessionManager(context: Context) {
     private var prefs: SharedPreferences = context.getSharedPreferences(
@@ -92,6 +93,8 @@ class SessionManager(context: Context) {
         editor.remove(USER_ID)
         editor.remove(USER_EMAIL)
         editor.remove(DEVICE_ID)
+
+        editor.remove(LibsignalHelper.STORE_KEY)
         editor.apply()
     }
 

@@ -28,6 +28,12 @@ interface ChatActivityDao {
             "WHERE conversation_table.id = :id")
     fun getServerIdByConversationId(id: Long): Long
 
+    @Query("SELECT contact_table.id " +
+            "FROM conversation_table " +
+            "INNER JOIN contact_table ON contact_table.id = conversation_table.contact_id " +
+            "WHERE conversation_table.id = :id")
+    fun getContactByByConversationId(id: Long): Long
+
     @Query("SELECT device_table.device_id " +
             "FROM device_table " +
             "INNER JOIN conversation_table ON conversation_table.contact_id = device_table.contact_id " +

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.byespy.data.dao.ChatActivityDao
+import com.example.byespy.data.entity.Device
 import com.example.byespy.data.entity.Message
 import com.example.byespy.data.model.MessageItem
 import com.example.byespy.network.Api
@@ -23,6 +24,12 @@ class ChatViewModel(
     fun messages(): Flow<List<MessageItem>> = chatActivityDao.getMessagesByConversationId(conversationId)
 
     fun getServerIdByConversationId() = chatActivityDao.getServerIdByConversationId(conversationId)
+
+    fun getDevicesByConversationId() = chatActivityDao.getDevicesByConversationId(conversationId)
+
+    fun addDevice(deviceId: Long) = chatActivityDao.addDevice(Device(deviceId, chatActivityDao.getContactByByConversationId(conversationId)))
+
+    fun removeDevice(deviceId: Long) = chatActivityDao.deleteDevice(Device(deviceId, chatActivityDao.getContactByByConversationId(conversationId)))
 
     // add own message to list
     fun insertOwnMessage(content: String) {

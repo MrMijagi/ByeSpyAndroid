@@ -74,7 +74,7 @@ class ChatActivity : AppCompatActivity(), MessageListener {
 
             lifecycle.coroutineScope.launch {
                 try {
-                    LibsignalHelper.sendMessage(inputText.text.toString(), receiverUserId, applicationContext)
+                    LibsignalHelper.sendMessage(inputText.text.toString(), receiverUserId, applicationContext, chatViewModel)
 
                     chatViewModel.insertOwnMessage(inputText.text.toString())
                     inputText.text?.clear()

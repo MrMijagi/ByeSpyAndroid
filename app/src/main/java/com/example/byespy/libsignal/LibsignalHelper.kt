@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.example.byespy.R
+import com.example.byespy.data.dao.ChatActivityDao
 import com.example.byespy.network.Api
 import com.example.byespy.network.SessionManager
 import com.example.byespy.network.requests.CiphertextMessage
@@ -15,6 +16,8 @@ import com.example.byespy.network.response.MessageSentInvalidDevicesResponse
 import com.example.byespy.network.response.PreKey
 import com.example.byespy.network.response.SignedPreKey
 import com.example.byespy.ui.chat.ChatActivity
+import com.example.byespy.ui.chat.ChatActivity.Companion.TAG
+import com.example.byespy.ui.chat.ChatViewModel
 import com.google.gson.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
@@ -148,54 +151,72 @@ public final class LibsignalHelper {
 
         //region Sending messages
 
-        suspend fun sendMessage(plaintextMessage: String, receiverUserId: Int, applicationContext: Context) {
+        suspend fun sendMessage(plaintextMessage: String, receiverUserId: Int, applicationContext: Context, chatViewModel: ChatViewModel) {
             val store = getStore(applicationContext)
 
-            ensureSession(receiverUserId, store, applicationContext)
-            val encryptedMessage = encryptMessage(plaintextMessage, receiverUserId, store, applicationContext)
-            sendMessageToServer(receiverUserId, listOf(encryptedMessage), applicationContext)
+            val knownDevices = chatViewModel.getDevicesByConversationId()
+            val encryptedMessages = encryptAllMessages(receiverUserId, plaintextMessage, store, applicationContext, knownDevices.toMutableList())
+            sendMessageToServer(receiverUserId, plaintextMessage, encryptedMessages, applicationContext, chatViewModel, store)
 
             saveStore(applicationContext, store)
         }
 
-        private suspend fun ensureSession(receiverUserId: Int, protocolStore: SignalProtocolStore, applicationContext: Context) {
-            val receiverAddress = SignalProtocolAddress(receiverUserId.toString(), 1)
-            if(protocolStore.containsSession(receiverAddress)) {
-                Log.d("abc", "Session is present!")
-                return
+        suspend fun encryptAllMessages(
+            receiverUserId: Int,
+            plaintextMessage: String,
+            protocolStore: SignalProtocolStore,
+            applicationContext: Context,
+            knownDevices: List<Long>
+        ): MutableList<MessageToSave> {
+            val encryptedMessages = mutableListOf<MessageToSave>()
+            knownDevices.forEach { knownDevice ->
+                encryptedMessages.add(encryptMessage(plaintextMessage, receiverUserId, knownDevice.toInt(), protocolStore, applicationContext))
             }
-            Log.d("abc", "Session is not present, creating request...")
-
-            //TODO make it better
-            val getSessionDataRequest = SaveMessageRequest(
-                senderDeviceId = SessionManager(applicationContext).fetchDeviceId(),
-                receiverUserId = receiverUserId,
-                messageToSaves = listOf()
-            )
-            val serverResponse = Api.getApiService(applicationContext).saveMessage(getSessionDataRequest)
-
-            val messageSentInvalidDevicesResponse = getMoshi().adapter(
-                MessageSentInvalidDevicesResponse::class.java).fromJson(Gson().toJson(serverResponse.body()))
-            if(messageSentInvalidDevicesResponse != null) {
-                val sessionBuilder = SessionBuilder(protocolStore, receiverAddress)
-                sessionBuilder.process(createPreKeyBundle(messageSentInvalidDevicesResponse.devicesResponse[0]))
-            } else {
-                throw IllegalArgumentException("This response shouldn't be null!")
-            }
+            return encryptedMessages
         }
+
+        fun encryptAllMessagesRepeat(
+            receiverUserId: Int,
+            plaintextMessage: String,
+            protocolStore: SignalProtocolStore,
+            applicationContext: Context,
+            knownDevices: List<Long>,
+            previouslyEncryptedMessages: MutableList<MessageToSave>
+        ): MutableList<MessageToSave> {
+
+            //remove devices which are outdated
+            val updatedMessages = previouslyEncryptedMessages.filter { message -> knownDevices.contains(message.deviceId.toLong()) }.toMutableList()
+
+            //get new devices
+            val alreadyEncryptedMessages = updatedMessages.map { message -> message.deviceId }
+            val nonEncryptedDevices = knownDevices.filter { device -> !alreadyEncryptedMessages.contains(device.toInt()) }
+
+            nonEncryptedDevices.forEach { nonEncryptedDevice ->
+                updatedMessages.add(encryptMessage(plaintextMessage, receiverUserId, nonEncryptedDevice.toInt(), protocolStore, applicationContext))
+            }
+            return updatedMessages
+        }
+
 
         private fun createPreKeyBundle(deviceResponse: DeviceResponse): PreKeyBundle {
-            val preKeyPublicKey = ECPublicKey(ustringToByteArray(deviceResponse.preKeyBundle.preKey.publicKey))
-            val signedPreKeyPublicKey = ECPublicKey(ustringToByteArray(deviceResponse.preKeyBundle.signedKey.publicKey))
+            val preKeyBundleFromResponse = deviceResponse.preKeyBundle
+            if(preKeyBundleFromResponse != null) {
+                val preKeyPublicKey = ECPublicKey(ustringToByteArray(deviceResponse.preKeyBundle.preKey.publicKey))
+                val signedPreKeyPublicKey = ECPublicKey(ustringToByteArray(deviceResponse.preKeyBundle.signedKey.publicKey))
 
-            val signedPreKeySignature = ustringToByteArray(deviceResponse.preKeyBundle.signedKey.signature)
-            val identityPublicKey = IdentityKey(ustringToByteArray(deviceResponse.preKeyBundle.identityKey))
+                val signedPreKeySignature = ustringToByteArray(deviceResponse.preKeyBundle.signedKey.signature)
+                val identityPublicKey = IdentityKey(ustringToByteArray(deviceResponse.preKeyBundle.identityKey))
 
-            return PreKeyBundle(1, deviceResponse.deviceId, deviceResponse.preKeyBundle.preKey.keyId, preKeyPublicKey, deviceResponse.preKeyBundle.signedKey.keyId, signedPreKeyPublicKey, signedPreKeySignature, identityPublicKey)
+                return PreKeyBundle(1, deviceResponse.deviceId, deviceResponse.preKeyBundle.preKey.keyId, preKeyPublicKey, deviceResponse.preKeyBundle.signedKey.keyId, signedPreKeyPublicKey, signedPreKeySignature, identityPublicKey)
+
+            } else {
+                throw IllegalArgumentException("Pre key bundle shouldn't be null!")
+            }
+
         }
 
-        private fun encryptMessage(plaintextMessage: String, receiverUserId: Int, protocolStore: SignalProtocolStore, applicationContext: Context): MessageToSave {
-            val receiverAddress = SignalProtocolAddress(receiverUserId.toString(), 1)
+        private fun encryptMessage(plaintextMessage: String, receiverUserId: Int, receiverDeviceId: Int, protocolStore: SignalProtocolStore, applicationContext: Context): MessageToSave {
+            val receiverAddress = getSignalAddress(receiverUserId, receiverDeviceId) //TODO
 
             val sessionCipher = SessionCipher(protocolStore, receiverAddress)
 
@@ -208,21 +229,64 @@ public final class LibsignalHelper {
                 }
 
             return MessageToSave(
-                1,  //TODO
+                receiverDeviceId,
                 "type",
                 Calendar.getInstance().time,
                 Gson().toJson(CiphertextMessage(encryptedMessage.type, encryptedMessageString, 1))  //TODO
             )
         }
 
-        private suspend fun sendMessageToServer(receiverUserId: Int, encryptedMessages: List<MessageToSave>, applicationContext: Context) {
+        private suspend fun sendMessageToServer(
+            receiverUserId: Int,
+            plaintextMessage: String,
+            encryptedMessages: MutableList<MessageToSave>,
+            applicationContext: Context,
+            chatViewModel: ChatViewModel,
+            protocolStore: SignalProtocolStore
+        ) {
             val requestToServer = SaveMessageRequest(
                 senderDeviceId = SessionManager(applicationContext).fetchDeviceId(),
                 receiverUserId = receiverUserId,
                 messageToSaves = encryptedMessages
             )
-            val responseFromServer = Api.getApiService(applicationContext).saveMessage(requestToServer)
+            val responseFromServer =
+                Api.getApiService(applicationContext).saveMessage(requestToServer)
+            if (responseFromServer.code() == 202) {
+                val messageSentInvalidDevicesResponse = getMoshi().adapter(
+                    MessageSentInvalidDevicesResponse::class.java).fromJson(Gson().toJson(responseFromServer.body()))
+
+                if(messageSentInvalidDevicesResponse != null) {
+                    updateDevices(messageSentInvalidDevicesResponse, receiverUserId, protocolStore, chatViewModel)
+                    val knownDevices = chatViewModel.getDevicesByConversationId()
+                    Log.d("Abc", "Known devices: $knownDevices")
+                    val newEncryptedMessage = encryptAllMessagesRepeat(receiverUserId, plaintextMessage, protocolStore, applicationContext, knownDevices, encryptedMessages)
+                    sendMessageToServer(receiverUserId, plaintextMessage, newEncryptedMessage, applicationContext, chatViewModel, protocolStore)
+                } else {
+                    throw IllegalArgumentException("This response shouldn't be null!")
+                }
+            } else if (responseFromServer.code() == 200) {
+                //TODO?
+                return
+            } else {
+                Log.e(TAG, "Unknown response code! Code: ${responseFromServer.code()}")
+            }
         }
+
+        private fun updateDevices(messageSentInvalidDevicesResponse: MessageSentInvalidDevicesResponse, receiverUserId: Int, protocolStore: SignalProtocolStore, chatViewModel: ChatViewModel) {
+            messageSentInvalidDevicesResponse.devicesResponse.forEach { deviceResponse ->
+                if(deviceResponse.preKeyBundle != null) {
+                    val preKeyBundle = createPreKeyBundle(deviceResponse)
+                    val receiverAddress = getSignalAddress(receiverUserId, deviceResponse.deviceId)
+                    val sessionBuilder = SessionBuilder(protocolStore, receiverAddress)
+                    sessionBuilder.process(preKeyBundle)
+                    Log.d("abc", "Adding device ${deviceResponse.deviceId}")
+                    chatViewModel.addDevice(deviceResponse.deviceId.toLong())
+                } else {
+                    chatViewModel.removeDevice(deviceResponse.deviceId.toLong())
+                }
+            }
+        }
+
 
         //endregion
 
@@ -255,10 +319,7 @@ public final class LibsignalHelper {
                 val ciphertextAdapter = getMoshi().adapter(CiphertextMessage::class.java)
                 val ciphertext = ciphertextAdapter.fromJson(receivedMessage.content)
                 if (ciphertext != null) {
-                    val senderAddress = SignalProtocolAddress(
-                        receivedMessage.sender.userId.toString(),
-                        receivedMessage.sender.deviceId
-                    )
+                    val senderAddress = getSignalAddress(receivedMessage.sender.userId, receivedMessage.sender.deviceId)
 
                     val plaintextMessage = String(
                         decryptMessage(ciphertext, senderAddress, protocolStore),
@@ -277,6 +338,10 @@ public final class LibsignalHelper {
         //endregion
 
         //region Utils
+
+        private fun getSignalAddress(user_id: Int, device_id: Int): SignalProtocolAddress {
+            return SignalProtocolAddress("$user_id;$device_id", device_id)
+        }
 
         private fun getMoshi(): Moshi {
             return Moshi.Builder()

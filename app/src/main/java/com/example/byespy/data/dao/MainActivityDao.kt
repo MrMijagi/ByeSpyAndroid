@@ -23,7 +23,7 @@ interface MainActivityDao {
                 "INNER JOIN contact_table ON contact_table.id = conversation_table.contact_id " +
                 "INNER JOIN ( " +
                 "   SELECT message_table.conversation_id AS conversation_id, " +
-                "          MIN(message_table.sent_at) AS sent_at " +
+                "          MAX(message_table.sent_at) AS sent_at " +
                 "   FROM message_table " +
                 "   GROUP BY message_table.conversation_id " +
                 ") message_grouped ON conversation_table.id = message_grouped.conversation_id " +
