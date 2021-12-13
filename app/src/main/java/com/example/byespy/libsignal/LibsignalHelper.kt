@@ -65,7 +65,7 @@ public final class LibsignalHelper {
         private suspend fun createStore(applicationContext: Context): SignalProtocolStore {
             val registrationId = 1 //TODO
             val identityKeyPair = createIdentityKeyPair()
-            val preKeys = createPreKeyRecords(2)
+            val preKeys = createPreKeyRecords(100)
             val signedPreKey = createSignedPreKeyRecord(identityKeyPair)
 
             val store = createStore(identityKeyPair, registrationId)
@@ -132,12 +132,14 @@ public final class LibsignalHelper {
                                                 signedPreKey: SignedPreKeyRecord,
                                                 applicationContext: Context)
         {
+            val prekeysList = mutableListOf<PreKey>()
+            preKeys.forEach {
+                prekeysList.add(PreKey(it.id, byteArrayToUString(it.keyPair.publicKey.serialize())))
+            }
+
             val sendPreKeysBundleRequest = SendPreKeysBundleRequest(
                 byteArrayToUString(identityKeyPair.publicKey.serialize()),
-                listOf(
-                    PreKey(preKeys[0].id, byteArrayToUString(preKeys[0].keyPair.publicKey.serialize())),
-                    PreKey(preKeys[1].id, byteArrayToUString(preKeys[1].keyPair.publicKey.serialize())),
-                ),
+                prekeysList,
                 SignedPreKey(signedPreKey.id, byteArrayToUString(signedPreKey.keyPair.publicKey.serialize()), byteArrayToUString(signedPreKey.signature))
             )
             val response = Api.getApiService(applicationContext).sendPreKeysBundle(sendPreKeysBundleRequest)
