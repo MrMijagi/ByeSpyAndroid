@@ -158,7 +158,7 @@ object WebSocketManager {
                 }
                 Log.i(
                     TAG,
-                    "connect failed throwable：" + t.message
+                    "connect failed throwable：" + t.stackTraceToString()
                 )
                 isConnect = false
                 messageListener.onConnectFailed()

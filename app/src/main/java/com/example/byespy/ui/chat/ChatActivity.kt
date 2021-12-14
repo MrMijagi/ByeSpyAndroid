@@ -193,11 +193,13 @@ class ChatActivity : AppCompatActivity(), MessageListener {
             }
         }
 
-        when (val type = jsonObject.get("type") as String) {
-            "welcome" -> Log.d(TAG, "welcome")
-            "ping" -> Unit
-            else -> Log.d(TAG, type)
+        if (jsonObject.has("type")) {
+            when (val type = jsonObject.get("type") as String) {
+                "welcome" -> Log.d(TAG, "welcome")
+                "ping" -> Unit
+                else -> Log.d(TAG, type)
+            }
+            //receiveMessage(text)
         }
-        //receiveMessage(text)
     }
 }
