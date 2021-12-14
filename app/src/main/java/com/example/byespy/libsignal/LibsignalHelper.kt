@@ -300,7 +300,7 @@ public final class LibsignalHelper {
 
             if(ciphertextMessage.type == 3) {
                 return sessionCipher.decrypt(PreKeySignalMessage(ciphertextSerialized))
-            } else if(ciphertextMessage.type == 1) {
+            } else if(ciphertextMessage.type == 1 || ciphertextMessage.type == 2) {
                 return sessionCipher.decrypt(SignalMessage(ciphertextSerialized))
             } else {
                 throw IllegalArgumentException("Unknown ciphertext type! Type " + ciphertextMessage.type.toString())
